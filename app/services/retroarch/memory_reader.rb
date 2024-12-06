@@ -4,16 +4,17 @@ require 'socket'
 
 module Retroarch
   class MemoryReader
-    def read_bytes(address, length)
+    BATCH_SIZE = 50
+
+    def self.read_bytes(address, length)
       memory_data = Array.new(length)
-      batch_size = 50
       Async do |task|
         barrier = Async::Barrier.new
 
-        (0...length).step(batch_size) do |i|
+        (0...length).step(BATCH_SIZE) do |i|
           barrier.async do
             batch_address = address + i
-            batch_length = [batch_size, length - i].min
+            batch_length = [BATCH_SIZE, length - i].min
             batch_data = read_bytes_packet(batch_address, batch_length)
 
             batch_data.each_with_index do |byte, j|
@@ -28,7 +29,7 @@ module Retroarch
       memory_data
     end
 
-    def read_bytes_packet(address, length)
+    def self.read_bytes_packet(address, length)
       message = "READ_CORE_MEMORY #{address.to_s(16)} #{length}"
       udp_socket = UDPSocket.new
 
