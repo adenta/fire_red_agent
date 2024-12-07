@@ -1,17 +1,14 @@
 module Locomotion
-  G_MAP_HEADER = 0x02036dfc
-  G_MAP_HEADER_LENGTH = 0x1c
-
   class GameObjectReader
     def self.fetch_map_header
       memory_data = Retroarch::MemoryReader.read_bytes(G_MAP_HEADER, G_MAP_HEADER_LENGTH)
 
       binary_data = memory_data.map { |byte| byte.to_i(16).chr }.join
 
-      header = binary_data.unpack('LLLLSSCCCCCC')
+      header = binary_data.unpack('V4v2C6')
       {
         map_layout: header[0],
-        events: header[1].to_s(16),
+        events: header[1],
         map_scripts: header[2],
         connections: header[3],
         music: header[4],
