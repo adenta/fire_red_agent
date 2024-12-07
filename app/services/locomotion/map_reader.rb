@@ -88,5 +88,9 @@ module Locomotion
         battle_type: header[13]
       }
     end
+
+    def self.fetch_map_events
+      events_pointer = fetch_map_header[:events]
+    end
   end
 end

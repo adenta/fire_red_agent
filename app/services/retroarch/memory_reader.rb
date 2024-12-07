@@ -45,6 +45,10 @@ module Retroarch
 
         # Receive the response
         response, _addr = udp_socket.recvfrom(1024) # 1024 is the max buffer size
+
+        ap address.to_s(16)
+        ap response
+        ap '~~~~'
         return response.gsub("READ_CORE_MEMORY #{address.to_s(16)} ", '').strip.split(' ')
       rescue Errno::EAGAIN
         puts 'No response received (timeout)'
