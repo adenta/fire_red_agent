@@ -1,13 +1,15 @@
 module Locomotion
   G_BACKUP_MAP_DATA = 0x02031dfc
   G_BACKUP_MAP_DATA_LENGTH = 0x2800
+  V_MAP = 0x03005040
+  V_MAP_LENGTH = 12
 
   class MapReader
     def self.fetch_as_matrix
       memory_data = Retroarch::MemoryReader.read_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
-      # TODO(adenta) this shouldn't be hard coded
-      row_size = 78
+      # unsure why I need to multiply this by two
+      row_size = fetch_map_dimensions[:map_width] * 2
 
       grid = memory_data.each_slice(row_size).to_a
 
@@ -41,6 +43,20 @@ module Locomotion
       matrix = fetch_as_matrix
 
       matrix.map { |row| row.join }
+    end
+
+    def self.fetch_map_dimensions
+      memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
+
+      map_width, map_height, map_location = memory_data.each_slice(4).to_a
+
+      map_width.reverse.join.to_i(16)
+
+      {
+        map_width: map_width.reverse.join.to_i(16),
+        map_height: map_height.reverse.join.to_i(16)
+
+      }
     end
   end
 end
