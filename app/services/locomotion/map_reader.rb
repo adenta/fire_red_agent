@@ -8,47 +8,35 @@ module Locomotion
   G_MAP_HEADER = 0x02036dfc
   G_MAP_HEADER_LENGTH = 0x1c
 
+  MAPGRID_METATILE_ID_MASK = 0x03FF
+  MAPGRID_COLLISION_MASK   = 0x0C00
+  MAPGRID_ELEVATION_MASK   = 0xF000
+  MAPGRID_COLLISION_SHIFT  = 10
+  MAPGRID_ELEVATION_SHIFT  = 12
+
+  TileData = Struct.new(:metatile_id, :collision, :elevation)
+
   class MapReader
-    def self.fetch_as_matrix
+    def self.fetch_map_data
       # Gotta rewrite this using the pack stuff
-      raise NotImplementedError
-      memory_data = Retroarch::MemoryReader.read_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
+      memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
-      # unsure why I need to multiply this by two
-      row_size = fetch_map_dimensions[:map_width] * 2
-
-      grid = memory_data.each_slice(row_size).to_a
-
-      byte_grid = grid.map do |row|
-        row.each_slice(2).to_a
+      tiles = []
+      # Assuming memory_data is a String of bytes
+      (0...(memory_data.bytesize / 2)).each do |i|
+        low_byte  = memory_data.getbyte(i * 2)
+        high_byte = memory_data.getbyte(i * 2 + 1)
+        raw       = (high_byte << 8) | low_byte
+        tiles << parse_tile_data(raw)
       end
-
-      byte_grid.map do |row|
-        row.map do |pair|
-          cell = pair.reverse.join
-
-          binary_string = cell.to_i(16).to_s(2).rjust(16, '0').split('').reverse
-
-          collision = [binary_string[10], binary_string[11]]
-
-          case collision
-          when %w[0 0]
-            ' '
-          when %w[0 1]
-            '1'
-          when %w[1 0]
-            '2'
-          when %w[1 1]
-            '3'
-          end
-        end
-      end
+      tiles
     end
 
-    def self.fetch_as_text
-      matrix = fetch_as_matrix
-
-      matrix.map { |row| row.join }
+    def self.parse_tile_data(raw)
+      metatile_id = raw & MAPGRID_METATILE_ID_MASK
+      collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
+      elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
+      TileData.new(metatile_id, collision, elevation)
     end
 
     def self.fetch_map_dimensions
@@ -89,10 +77,6 @@ module Locomotion
         floor_num: header[12],
         battle_type: header[13]
       }
-    end
-
-    def self.fetch_map_events
-      events_pointer = fetch_map_header[:events]
     end
   end
 end

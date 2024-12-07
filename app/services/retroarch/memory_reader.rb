@@ -29,6 +29,11 @@ module Retroarch
       memory_data
     end
 
+    def self.read_binary_bytes(address, length)
+      memory_data = read_bytes(address, length)
+      memory_data.map { |byte| byte.to_i(16).chr }.join
+    end
+
     def self.read_bytes_packet(address, length)
       message = "READ_CORE_MEMORY #{address.to_s(16)} #{length}"
       udp_socket = UDPSocket.new
