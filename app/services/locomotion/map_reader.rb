@@ -10,6 +10,8 @@ module Locomotion
 
   class MapReader
     def self.fetch_as_matrix
+      # Gotta rewrite this using the pack stuff
+      raise NotImplementedError
       memory_data = Retroarch::MemoryReader.read_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
       # unsure why I need to multiply this by two
@@ -33,11 +35,11 @@ module Locomotion
           when %w[0 0]
             ' '
           when %w[0 1]
-            'x'
+            '1'
           when %w[1 0]
-            'x'
+            '2'
           when %w[1 1]
-            'x'
+            '3'
           end
         end
       end
