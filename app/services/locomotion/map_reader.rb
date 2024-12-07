@@ -14,10 +14,14 @@ module Locomotion
   MAPGRID_COLLISION_SHIFT  = 10
   MAPGRID_ELEVATION_SHIFT  = 12
 
-  TileData = Struct.new(:metatile_id, :collision, :elevation)
+  TileData = Struct.new(:metatile_id, :collision, :elevation) do
+    def to_s
+      collision.to_s
+    end
+  end
 
   class MapReader
-    def self.fetch_map_data
+    def self.fetch_tile_data
       # Gotta rewrite this using the pack stuff
       memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
@@ -32,12 +36,21 @@ module Locomotion
       tiles
     end
 
-    def self.parse_tile_data(raw)
-      metatile_id = raw & MAPGRID_METATILE_ID_MASK
-      collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
-      elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
-      TileData.new(metatile_id, collision, elevation)
-    end
+    # def self.combined_map
+    #   tiles = fetch_tile_data.map(&:to_s)
+    #   row_size = fetch_map_dimensions[:map_width]
+
+    #   grid = tiles.each_slice(row_size).to_a
+
+    #   parsed_events = Locomotion::EventReader.parse_map_events
+
+    #   all_events = parsed_events[:object_events] + parsed_events[:warps] + parsed_events[:coord_events] + parsed_events[:bg_events]
+
+    #   all_events.each do |event|
+    #     grid[event.y + 7][event.x + 7] = 'E'
+    #   end
+    #   grid.map(&:join)
+    # end
 
     def self.fetch_map_dimensions
       memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
@@ -77,6 +90,13 @@ module Locomotion
         floor_num: header[12],
         battle_type: header[13]
       }
+    end
+
+    private_class_method def self.parse_tile_data(raw)
+      metatile_id = raw & MAPGRID_METATILE_ID_MASK
+      collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
+      elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
+      TileData.new(metatile_id, collision, elevation)
     end
   end
 end
