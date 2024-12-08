@@ -75,7 +75,7 @@ module Pathfinding
                     end_chr
                   elsif path&.include?(current)
                     path_chr
-                  elsif current.walkable
+                  elsif current.walkable?
                     empty_chr
                   else
                     block_chr
@@ -99,7 +99,7 @@ module Pathfinding
     # Returns if a node at position (+x+, +y+) is walkable.
     #
     def walkable?(x, y)
-      inside?(x, y) && node(x, y).walkable
+      inside?(x, y) && node(x, y).walkable?
     end
 
     #

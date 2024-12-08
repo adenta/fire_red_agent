@@ -17,8 +17,8 @@ module Pathfinding
     # Gets the y coordinate in the grid.
     attr_reader :y
 
-    # Gets whether the node is walkable.
-    attr_reader :walkable
+    # # Gets whether the node is walkable.
+    # attr_reader :walkable
 
     #
     # Creates a node.
@@ -27,6 +27,10 @@ module Pathfinding
       @x = x
       @y = y
       @walkable = walkable
+    end
+
+    def walkable?
+      @walkable
     end
 
     #
