@@ -6,6 +6,10 @@ module Retroarch
           command = '/Applications/RetroArch.app/Contents/MacOS/RetroArch'
           system(command)
         end
+
+        task.async do 
+          
+        end
       end
     end
   end
