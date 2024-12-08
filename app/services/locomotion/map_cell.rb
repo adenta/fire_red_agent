@@ -1,5 +1,7 @@
 module Locomotion
   class MapCell
+    NIL_METATILE_ID = 1023
+
     def initialize(tile, events)
       raise ArgumentError, 'Tile cannot be nil' if tile.nil?
 
@@ -8,7 +10,10 @@ module Locomotion
     end
 
     def walkable?
-      true
+      non_nil_metatile = @tile.metatile_id != NIL_METATILE_ID
+      no_collision = @tile.collision == 0
+
+      non_nil_metatile && no_collision
     end
   end
 end

@@ -14,6 +14,8 @@ module Locomotion
   MAPGRID_COLLISION_SHIFT  = 10
   MAPGRID_ELEVATION_SHIFT  = 12
 
+  PLAYER_LOCATION = 0x2036e48
+
   TileData = Struct.new(:metatile_id, :collision, :elevation) do
     def to_s
       collision.to_s
@@ -69,6 +71,13 @@ module Locomotion
         map_height: map_height.reverse.join.to_i(16)
 
       }
+    end
+
+    def self.fetch_player_location
+      memory_data = Retroarch::MemoryReader.read_bytes(PLAYER_LOCATION, 0x4)
+
+      x, y = memory_data.each_slice(2).to_a.map(&:reverse).map(&:join).map { |x| x.to_i(16) }
+      { x: x, y: y }
     end
 
     def self.fetch_map_header
