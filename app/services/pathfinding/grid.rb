@@ -135,7 +135,7 @@ module Pathfinding
         s3 = true
       end
 
-      return neighbors if diagonal_movement == DiagonalMovement::NEVER
+      return neighbors if diagonal_movement == Pathfinding::DiagonalMovement::NEVER
 
       if diagonal_movement == DiagonalMovement::ONLY_WHEN_NO_OBSTACLE
         d0 = s3 && s0
