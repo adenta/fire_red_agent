@@ -1,0 +1,55 @@
+module Retroarch
+  class KeyboardService
+    KEY_CODES = {
+      up: 126,
+      down: 125,
+      left: 123,
+      right: 124
+    }.freeze
+
+    APPLICATION_NAME = 'RetroArch'
+
+    def self.up
+      send_key_event(:up)
+    end
+
+    def self.down
+      send_key_event(:down)
+    end
+
+    def self.left
+      send_key_event(:left)
+    end
+
+    def self.right
+      send_key_event(:right)
+    end
+
+    def self.send_key_event(direction, duration = 0.1)
+      Async do |task|
+        key_code = KEY_CODES[direction]
+        raise ArgumentError, 'Invalid direction' unless key_code
+
+        activate_application
+        key_down(key_code)
+        task.sleep(duration)
+        key_up(key_code)
+      end
+    end
+
+    private
+
+    def self.activate_application
+      system("osascript -e 'tell application \"#{APPLICATION_NAME}\" to activate'")
+      sleep(1)
+    end
+
+    def self.key_down(key_code)
+      system("osascript -e 'tell application \"System Events\" to key down #{key_code}'")
+    end
+
+    def self.key_up(key_code)
+      system("osascript -e 'tell application \"System Events\" to key up #{key_code}'")
+    end
+  end
+end
