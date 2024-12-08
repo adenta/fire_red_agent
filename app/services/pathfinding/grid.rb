@@ -105,7 +105,7 @@ module Pathfinding
     #
     # Get all neighbors of a node.
     #
-    def neighbors(node, diagonal_movement = DiagonalMovement::NEVER)
+    def neighbors(node)
       x = node.x
       y = node.y
       neighbors = []
@@ -134,36 +134,6 @@ module Pathfinding
         neighbors << node(x - 1, y)
         s3 = true
       end
-
-      return neighbors if diagonal_movement == Pathfinding::DiagonalMovement::NEVER
-
-      if diagonal_movement == DiagonalMovement::ONLY_WHEN_NO_OBSTACLE
-        d0 = s3 && s0
-        d1 = s0 && s1
-        d2 = s1 && s2
-        d3 = s2 && s3
-      elsif diagonal_movement == DiagonalMovement::IF_AT_MOST_ONE_OBSTACLE
-        d0 = s3 || s0
-        d1 = s0 || s1
-        d2 = s1 || s2
-        d3 = s2 || s3
-      elsif diagonal_movement == DiagonalMovement::ALWAYS
-        d0 = d1 = d2 = d3 = true
-      else
-        raise 'Incorrect value of diagonal_movement'
-      end
-
-      # ↖
-      neighbors << node(x - 1, y - 1) if d0 && walkable?(x - 1, y - 1)
-
-      # ↗
-      neighbors << node(x + 1, y - 1) if d1 && walkable?(x + 1, y - 1)
-
-      # ↘
-      neighbors << node(x + 1, y + 1) if d2 && walkable?(x + 1, y + 1)
-
-      # ↙
-      neighbors << node(x - 1, y + 1) if d3 && walkable?(x - 1, y + 1)
 
       neighbors
     end

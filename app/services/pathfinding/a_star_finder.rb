@@ -14,18 +14,11 @@ module Pathfinding
     #
     # Initializes the A* path-finder. Params:
     # * +heuristic+: heuristic function (see the +Heuristic+ module)
-    # * +diagonal_movement+: set diagonal movements (see the +DiagonalMovement+ module)
     #
     def initialize(
-      heuristic = Pathfinding::Heuristic.method(:manhattan),
-      diagonal_movement = Pathfinding::DiagonalMovement::NEVER
+      heuristic = Pathfinding::Heuristic.method(:manhattan)
     )
-      @diagonal_movement = diagonal_movement
-      @heuristic = if diagonal_movement == Pathfinding::DiagonalMovement::NEVER
-                     heuristic
-                   else
-                     Pathfinding::Heuristic.method(:octile)
-                   end
+      @heuristic = heuristic
     end
 
     #
@@ -55,7 +48,7 @@ module Pathfinding
 
         current = open_set.delete_at(open_set.index(current))
 
-        grid.neighbors(current, @diagonal_movement).each do |neighbor|
+        grid.neighbors(current).each do |neighbor|
           tentative_g_score = g_score[current] + d(current, neighbor)
           next if tentative_g_score >= g_score[neighbor]
 
