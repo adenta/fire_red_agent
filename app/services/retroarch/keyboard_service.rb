@@ -1,5 +1,10 @@
 module Retroarch
   class KeyboardService
+    UP = :up
+    DOWN = :down
+    LEFT = :left
+    RIGHT = :right
+
     KEY_CODES = {
       up: 126,
       down: 125,

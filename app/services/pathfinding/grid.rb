@@ -138,27 +138,6 @@ module Pathfinding
       neighbors
     end
 
-    def self.chart_path(path)
-      return [] if path.nil?
-
-      movements = []
-      path.each_cons(2) do |node, next_node|
-        dx = next_node.x - node.x
-        dy = next_node.y - node.y
-
-        if dx == 1
-          movements << 'right'
-        elsif dx == -1
-          movements << 'left'
-        elsif dy == 1
-          movements << 'down'
-        elsif dy == -1
-          movements << 'up'
-        end
-      end
-      movements
-    end
-
     #
     # Builds and returns the nodes.
     #

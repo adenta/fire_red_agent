@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Pathfinding::Grid, type: :service do
   describe 'integration' do
     it 'returns the correct path' do
+      raise NotImplementedError
       matrix = Locomotion::MapReader.fetch_map_cells
       grid = Pathfinding::Grid.new(matrix)
       player_location = Locomotion::MapReader.fetch_player_location
