@@ -3,11 +3,7 @@ require 'rails_helper'
 RSpec.describe Pathfinding::Grid, type: :service do
   describe 'integration' do
     it 'returns the correct path' do
-      matrix = [
-        [0, 0, 0],
-        [0, 1, 0],
-        [0, 0, 0]
-      ]
+      matrix = Locomotion::MapReader.fetch_map_cells
       grid = Pathfinding::Grid.new(matrix)
 
       start_node = grid.node(0, 0)

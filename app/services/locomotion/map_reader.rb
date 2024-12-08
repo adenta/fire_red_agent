@@ -36,8 +36,8 @@ module Locomotion
       tiles
     end
 
-    def self.formatted_tile_data
-      tiles = fetch_tile_data.map(&:to_s)
+    def self.fetch_map_cells
+      tiles = fetch_tile_data
       row_size = fetch_map_dimensions[:map_width]
 
       grid = tiles.each_slice(row_size).to_a
@@ -49,7 +49,12 @@ module Locomotion
       # all_events.each do |event|
       #   grid[event.y + 7][event.x + 7] = 'E'
       # end
-      grid.map(&:join)
+
+      grid.map do |row|
+        row.map do |tile|
+          Locomotion::MapCell.new(tile, [])
+        end
+      end
     end
 
     def self.fetch_map_dimensions

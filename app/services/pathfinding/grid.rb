@@ -146,8 +146,8 @@ module Pathfinding
       height.times do |y|
         nodes << []
         width.times do |x|
-          walkable = matrix[y][x] <= 0
-          nodes[y] << Node.new(x, y, walkable)
+          map_cell = matrix[y][x]
+          nodes[y] << Node.new(x, y, map_cell)
         end
       end
       nodes
