@@ -36,21 +36,21 @@ module Locomotion
       tiles
     end
 
-    # def self.combined_map
-    #   tiles = fetch_tile_data.map(&:to_s)
-    #   row_size = fetch_map_dimensions[:map_width]
+    def self.formatted_tile_data
+      tiles = fetch_tile_data.map(&:to_s)
+      row_size = fetch_map_dimensions[:map_width]
 
-    #   grid = tiles.each_slice(row_size).to_a
+      grid = tiles.each_slice(row_size).to_a
 
-    #   parsed_events = Locomotion::EventReader.parse_map_events
+      # parsed_events = Locomotion::EventReader.parse_map_events
 
-    #   all_events = parsed_events[:object_events] + parsed_events[:warps] + parsed_events[:coord_events] + parsed_events[:bg_events]
+      # all_events = parsed_events[:object_events] + parsed_events[:warps] + parsed_events[:coord_events] + parsed_events[:bg_events]
 
-    #   all_events.each do |event|
-    #     grid[event.y + 7][event.x + 7] = 'E'
-    #   end
-    #   grid.map(&:join)
-    # end
+      # all_events.each do |event|
+      #   grid[event.y + 7][event.x + 7] = 'E'
+      # end
+      grid.map(&:join)
+    end
 
     def self.fetch_map_dimensions
       memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
