@@ -121,8 +121,8 @@ module Locomotion
         graphics_id = io.read(1).unpack1('C')
         kind = io.read(1).unpack1('C')
         io.read(1) # padding
-        x = io.read(2).unpack1('s<')
-        y = io.read(2).unpack1('s<')
+        x = io.read(2).unpack1('s<') + 7
+        y = io.read(2).unpack1('s<') + 7
 
         elevation = nil
         movement_type = nil
@@ -139,21 +139,21 @@ module Locomotion
           # Normal
           elevation = io.read(1).unpack1('C')
           movement_type = io.read(1).unpack1('C')
-          range_word = io.read(2).unpack1('S<')
+          range_word = io.read(2).unpack1('s<') + 7
           movement_range_x = range_word & 0xF
           movement_range_y = (range_word >> 4) & 0xF
-          trainer_type = io.read(2).unpack1('S<')
-          trainer_range_berry_tree_id = io.read(2).unpack1('S<')
+          trainer_type = io.read(2).unpack1('s<') + 7
+          trainer_range_berry_tree_id = io.read(2).unpack1('s<') + 7
         else
           # Clone
           target_local_id = io.read(1).unpack1('C')
           io.read(3) # padding
-          target_map_num = io.read(2).unpack1('S<')
-          target_map_group = io.read(2).unpack1('S<')
+          target_map_num = io.read(2).unpack1('s<') + 7
+          target_map_group = io.read(2).unpack1('s<') + 7
         end
 
         script = io.read(4).unpack1('L<')
-        flag_id = io.read(2).unpack1('S<')
+        flag_id = io.read(2).unpack1('s<') + 7
         io.read(2) # final padding
 
         ObjectEventTemplate.new(
@@ -172,8 +172,8 @@ module Locomotion
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('s<')
-        y = io.read(2).unpack1('s<')
+        x = io.read(2).unpack1('s<') + 7
+        y = io.read(2).unpack1('s<') + 7
         elevation = io.read(1).unpack1('C')
         warp_id = io.read(1).unpack1('C')
         map_num = io.read(1).unpack1('C')
@@ -190,12 +190,12 @@ module Locomotion
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('S<')
-        y = io.read(2).unpack1('S<')
+        x = io.read(2).unpack1('s<') + 7
+        y = io.read(2).unpack1('s<') + 7
         elevation = io.read(1).unpack1('C')
         padding = io.read(1) # alignment padding
-        trigger = io.read(2).unpack1('S<')
-        index = io.read(2).unpack1('S<')
+        trigger = io.read(2).unpack1('s<') + 7
+        index = io.read(2).unpack1('s<') + 7
         io.read(2) # another padding for alignment
         script = io.read(4).unpack1('L<')
 
@@ -210,8 +210,8 @@ module Locomotion
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('S<')
-        y = io.read(2).unpack1('S<')
+        x = io.read(2).unpack1('s<') + 7
+        y = io.read(2).unpack1('s<') + 7
         elevation = io.read(1).unpack1('C')
         kind = io.read(1).unpack1('C')
         io.read(2) # padding for alignment

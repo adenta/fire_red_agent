@@ -8,6 +8,26 @@ module Locomotion
   end
 
   class Charter
+    def self.list_destinations
+      map_events = Locomotion::EventReader.parse_map_events
+
+      map_events.coord_events.each do |event|
+        puts "Coord Event - X: #{event.x}, Y: #{event.y}, Elevation: #{event.elevation}, Trigger: #{event.trigger}, Index: #{event.index}, Script: #{event.script}"
+      end
+
+      map_events.bg_events.each do |event|
+        puts "BG Event - X: #{event.x}, Y: #{event.y}, Elevation: #{event.elevation}, Kind: #{event.kind}, Hidden Item or Script: #{event.hidden_item_or_script}"
+      end
+
+      map_events.object_events.each do |event|
+        puts "Object Event - Local ID: #{event.local_id}, Graphics ID: #{event.graphics_id}, Kind: #{event.kind}, X: #{event.x}, Y: #{event.y}, Elevation: #{event.elevation}, Movement Type: #{event.movement_type}, Movement Range X: #{event.movement_range_x}, Movement Range Y: #{event.movement_range_y}, Trainer Type: #{event.trainer_type}, Trainer Range Berry Tree ID: #{event.trainer_range_berry_tree_id}, Script: #{event.script}, Flag ID: #{event.flag_id}, Target Local ID: #{event.target_local_id}, Target Map Num: #{event.target_map_num}, Target Map Group: #{event.target_map_group}"
+      end
+
+      map_events.warps.each do |event|
+        puts "Warp Event - X: #{event.x}, Y: #{event.y}, Elevation: #{event.elevation}, Warp ID: #{event.warp_id}, Map Num: #{event.map_num}, Map Group: #{event.map_group}"
+      end
+    end
+
     def self.chart_path(destination)
       destination_x = destination[:x]
       destination_y = destination[:y]
