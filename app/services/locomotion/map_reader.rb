@@ -16,6 +16,8 @@ module Locomotion
 
   PLAYER_LOCATION = 0x2036e48
 
+  MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
+
   TileData = Struct.new(:metatile_id, :collision, :elevation) do
     def to_s
       collision.to_s
@@ -59,8 +61,27 @@ module Locomotion
       end
     end
 
+    def self.fetch_metatile_ids
+      metatile_behaviors = fetch_metatile_behaviors
+      fetch_map_cells.map do |row|
+        row.map do |cell|
+          behavior_id = metatile_behaviors[cell.metatile_id]
+          Locomotion::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase] || ' '
+        end.join(', ')
+      end
+    end
+
     def self.fetch_uniq_metatile_ids
       fetch_tile_data.map(&:metatile_id).uniq
+    end
+
+    def self.fetch_uniq_metatile_id_metadata
+      uniq_ids = fetch_uniq_metatile_ids
+      uniq_ids_under_640 = uniq_ids.select { |id| id < 640 }
+      tileset = fetch_primary_tileset
+      uniq_ids_under_640.each do |id|
+        ap tileset[id]
+      end
     end
 
     def self.fetch_map_dimensions
@@ -125,48 +146,73 @@ module Locomotion
       }
     end
 
-    def self.fetch_secondary_tileset_meta
-      tileset_id = fetch_map_layout[:secondary_tileset]
-      memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_id, 0x18)
+    def self.tileset_metas
+      keys = %i[primary_tileset secondary_tileset]
+      rv = {}
+      keys.each do |key|
+        tileset_id = fetch_map_layout[key]
+        memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_id, 0x18)
 
-      is_compressed = memory_data.getbyte(0) != 0
-      is_secondary = memory_data.getbyte(1) != 0
-      tiles = memory_data[4, 4].unpack1('L<')
-      palettes = memory_data[8, 4].unpack1('L<')
-      metatiles = memory_data[12, 4].unpack1('L<')
-      callback = memory_data[16, 4].unpack1('L<')
-      metatile_attributes = memory_data[20, 4].unpack1('L<')
+        is_compressed = memory_data.getbyte(0) != 0
+        is_secondary = memory_data.getbyte(1) != 0
+        tiles = memory_data[4, 4].unpack1('L<')
+        palettes = memory_data[8, 4].unpack1('L<')
+        metatiles = memory_data[12, 4].unpack1('L<')
+        callback = memory_data[16, 4].unpack1('L<')
+        metatile_attributes = memory_data[20, 4].unpack1('L<')
 
-      {
-        is_compressed: is_compressed,
-        is_secondary: is_secondary,
-        tiles: tiles,
-        palettes: palettes,
-        metatiles: metatiles,
-        callback: callback,
-        metatile_attributes: metatile_attributes
-      }
-    end
-
-    def self.fetch_secondary_tileset
-      memory_data = Retroarch::MemoryReader.read_binary_bytes(fetch_secondary_tileset_meta[:tiles], 640 * 4)
-
-      attributes = []
-      memory_data.split('').each_slice(4) do |slice|
-        raw = slice.join.unpack1('L<')
-        attributes << {
-          behavior: (raw & 0x000001ff) >> 0,
-          terrain: (raw & 0x00003e00) >> 9,
-          attribute_2: (raw & 0x0003c000) >> 14,
-          attribute_3: (raw & 0x00fc0000) >> 18,
-          encounter_type: (raw & 0x07000000) >> 24,
-          attribute_5: (raw & 0x18000000) >> 27,
-          layer_type: (raw & 0x60000000) >> 29,
-          attribute_7: (raw & 0x80000000) >> 31
+        rv[key] = {
+          is_compressed: is_compressed,
+          is_secondary: is_secondary,
+          tiles: tiles,
+          palettes: palettes,
+          metatiles: metatiles,
+          callback: callback,
+          metatile_attributes: metatile_attributes
         }
       end
-      attributes.count
+
+      rv
     end
+
+    def self.fetch_metatile_behaviors
+      primary_memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_metas[:primary_tileset][:metatile_attributes],
+                                                                      MAX_METATILE_ATTRIBUTE_LENGTH)
+
+      primary_behaviors = primary_memory_data.unpack('L<*').map do |raw|
+        (raw & 0x1FF).to_s(16)
+      end
+
+      secondary_memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_metas[:secondary_tileset][:metatile_attributes],
+                                                                        MAX_METATILE_ATTRIBUTE_LENGTH)
+
+      secondary_behaviors = secondary_memory_data.unpack('L<*').map do |raw|
+        (raw & 0x1FF).to_s(16)
+      end
+
+      primary_behaviors + secondary_behaviors
+    end
+
+    # def self.fetch_primary_tileset
+    #   memory_data = Retroarch::MemoryReader.read_binary_bytes(fetch_primary_tileset_meta[:metatiles],
+    #                                                           MAX_METATILE_ATTRIBUTE_LENGTH)
+
+    #   attributes = []
+    #   memory_data.split('').each_slice(4) do |slice|
+    #     raw = slice.join.unpack1('L<')
+    #     attributes << {
+    #       behavior: (raw & 0x000001ff) >> 0,
+    #       terrain: (raw & 0x00003e00) >> 9,
+    #       attribute_2: (raw & 0x0003c000) >> 14,
+    #       attribute_3: (raw & 0x00fc0000) >> 18,
+    #       encounter_type: (raw & 0x07000000) >> 24,
+    #       attribute_5: (raw & 0x18000000) >> 27,
+    #       layer_type: (raw & 0x60000000) >> 29,
+    #       attribute_7: (raw & 0x80000000) >> 31
+    #     }
+    #   end
+    #   attributes
+    # end
 
     private_class_method def self.parse_tile_data(raw)
       metatile_id = raw & MAPGRID_METATILE_ID_MASK

@@ -15,5 +15,9 @@ module Locomotion
 
       non_nil_metatile && no_collision
     end
+
+    def metatile_id
+      @tile.metatile_id
+    end
   end
 end
