@@ -18,7 +18,7 @@ module Locomotion
 
   MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
 
-  TileData = Struct.new(:metatile_id, :collision, :elevation) do
+  TileData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior) do
     def to_s
       collision.to_s
     end
@@ -43,6 +43,7 @@ module Locomotion
     def self.fetch_map_cells
       tiles = fetch_tile_data
       row_size = fetch_map_dimensions[:map_width]
+      metatile_behaviors = fetch_metatile_behaviors
 
       grid = tiles.each_slice(row_size).to_a
 
@@ -56,6 +57,10 @@ module Locomotion
 
       grid.map do |row|
         row.map do |tile|
+          behavior_id = metatile_behaviors[tile.metatile_id].rjust(2, '0').upcase
+          tile.metatile_behavior = Locomotion::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
+          raise 'Must have a behavior' unless tile.metatile_behavior
+
           Locomotion::MapCell.new(tile, [])
         end
       end
