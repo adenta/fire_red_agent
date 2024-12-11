@@ -17,6 +17,8 @@ module Pathfinding
     # Gets the y coordinate in the grid.
     attr_reader :y
 
+    attr_reader :map_cell
+
     #
     # Creates a node.
     #

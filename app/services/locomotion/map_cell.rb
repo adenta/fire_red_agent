@@ -19,5 +19,9 @@ module Locomotion
     def metatile_id
       @tile.metatile_id
     end
+
+    def metatile_behavior
+      @tile.metatile_behavior
+    end
   end
 end

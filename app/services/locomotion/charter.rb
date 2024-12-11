@@ -89,6 +89,12 @@ module Locomotion
 
       raise PathNotFoundError if path.nil?
 
+      ap path.last
+      ap path.last
+      ap path.last
+      ap path.last
+      ap path.last
+
       path.each_cons(2) do |node, next_node|
         dx = next_node.x - node.x
         dy = next_node.y - node.y
@@ -102,6 +108,13 @@ module Locomotion
         elsif dy == -1
           Retroarch::KeyboardService.up
         end
+      end
+
+      last_metatile_behavior = path.last.map_cell.metatile_behavior
+
+      case last_metatile_behavior
+      when Locomotion::MetatileBehaviors::MB_DOWN_LEFT_STAIR_WARP
+        Retroarch::KeyboardService.left
       end
     end
   end
