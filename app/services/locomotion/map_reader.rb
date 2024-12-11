@@ -59,6 +59,10 @@ module Locomotion
       end
     end
 
+    def self.fetch_uniq_metatile_ids
+      fetch_tile_data.map(&:metatile_id).uniq
+    end
+
     def self.fetch_map_dimensions
       memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
 
@@ -103,6 +107,44 @@ module Locomotion
         show_map_name: (header[11] >> 2) & 0x3F,
         floor_num: header[12],
         battle_type: header[13]
+      }
+    end
+
+    def self.fetch_map_layout
+      memory_data = Retroarch::MemoryReader.read_binary_bytes(fetch_map_header[:map_layout], 0x1A)
+      layout_data = memory_data.unpack('l<l<l<l<l<l<CC')
+      {
+        width: layout_data[0],
+        height: layout_data[1],
+        border: layout_data[2],
+        map: layout_data[3],
+        primary_tileset: layout_data[4],
+        secondary_tileset: layout_data[5],
+        border_width: layout_data[6],
+        border_height: layout_data[7]
+      }
+    end
+
+    def self.fetch_primary_tileset
+      tileset_id = fetch_map_layout[:secondary_tileset]
+      memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_id, 0x18)
+
+      is_compressed = memory_data.getbyte(0) != 0
+      is_secondary = memory_data.getbyte(1) != 0
+      tiles = memory_data[4, 4].unpack1('L<')
+      palettes = memory_data[8, 4].unpack1('L<')
+      metatiles = memory_data[12, 4].unpack1('L<')
+      callback = memory_data[16, 4].unpack1('L<')
+      metatile_attributes = memory_data[20, 4].unpack1('L<')
+
+      {
+        is_compressed: is_compressed,
+        is_secondary: is_secondary,
+        tiles: tiles,
+        palettes: palettes,
+        metatiles: metatiles,
+        callback: callback,
+        metatile_attributes: metatile_attributes
       }
     end
 

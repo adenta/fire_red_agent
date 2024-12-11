@@ -71,7 +71,7 @@ module Locomotion
       :target_local_id, :target_map_num, :target_map_group
     )
 
-    WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group)
+    WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group, :warp_type)
 
     CoordEvent = Struct.new(:x, :y, :elevation, :trigger, :index, :script)
 
@@ -178,8 +178,22 @@ module Locomotion
         warp_id = io.read(1).unpack1('C')
         map_num = io.read(1).unpack1('C')
         map_group = io.read(1).unpack1('C')
+        warp_type = determine_warp_type(warp_id) # New logic to determine warp type
 
-        WarpEvent.new(x, y, elevation, warp_id, map_num, map_group)
+        WarpEvent.new(x, y, elevation, warp_id, map_num, map_group, warp_type)
+      end
+    end
+
+    def self.determine_warp_type(warp_id)
+      # Logic to determine warp type based on warp_id or other criteria
+      # For example:
+      case warp_id
+      when 1..10
+        'door'
+      when 11..20
+        'stairs'
+      else
+        'unknown'
       end
     end
 

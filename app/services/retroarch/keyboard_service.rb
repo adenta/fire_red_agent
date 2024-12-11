@@ -30,14 +30,14 @@ module Retroarch
       send_key_event(:right)
     end
 
-    def self.send_key_event(direction, duration = 0.1)
+    def self.send_key_event(direction, duration = 0.01)
       Async do |task|
         key_code = KEY_CODES[direction]
         raise ArgumentError, 'Invalid direction' unless key_code
 
         activate_application
         key_down(key_code)
-        task.sleep(duration)
+        # task.sleep(duration)
         key_up(key_code)
       end
     end
