@@ -36,8 +36,8 @@ class BaseSchema
   end
 
   # Define a number property
-  def number(name)
-    add_property(name, { type: 'number' })
+  def number(name, description: nil)
+    add_property(name, { type: 'number', description: }).compact
   end
 
   # Define a boolean property
