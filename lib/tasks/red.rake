@@ -1,8 +1,21 @@
 namespace :red do
   desc 'Describe your task here'
   task description: :environment do
-    map_events = Locomotion::EventReader.parse_map_events
-    puts map_events.to_json
-    puts Locomotion::MapReader.fetch_player_location.to_json
+    # destinations = Locomotion::Charter.list_destinations.to_json
+
+    client = SchemaClient.new
+    response_format = ButtonSequenceReasoning.new
+    response = client.parse(
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: 'What is the konami code?'
+        }
+      ],
+      response_format: response_format
+    )
+
+    ap response.parsed
   end
 end

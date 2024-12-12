@@ -4,12 +4,16 @@ module Retroarch
     DOWN = :down
     LEFT = :left
     RIGHT = :right
+    A = :a
+    B = :b
 
     KEY_CODES = {
       up: 126,
       down: 125,
       left: 123,
-      right: 124
+      right: 124,
+      a: 0,
+      b: 11
     }.freeze
 
     APPLICATION_NAME = 'RetroArch'

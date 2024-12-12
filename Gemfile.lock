@@ -397,6 +397,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  dotenv
   kamal
   propshaft
   puma (>= 5.0)
