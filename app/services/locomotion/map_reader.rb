@@ -66,6 +66,18 @@ module Locomotion
       end
     end
 
+    def self.fetch_colisions
+      collisions = []
+      map_cells = fetch_map_cells
+      map_cells.each_with_index.map do |row, x|
+        row.each_with_index.map do |cell, y|
+          collisions << "#{x}, #{y}" if !cell.walkable? && cell.metatile_id != 1023
+        end.join(', ')
+      end
+
+      collisions
+    end
+
     def self.fetch_metatile_ids
       metatile_behaviors = fetch_metatile_behaviors
       fetch_map_cells.map do |row|

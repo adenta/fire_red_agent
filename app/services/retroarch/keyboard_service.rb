@@ -34,6 +34,14 @@ module Retroarch
       send_key_event(:right)
     end
 
+    def self.a
+      send_key_event(:a)
+    end
+
+    def self.b
+      send_key_event(:b)
+    end
+
     def self.send_key_event(direction, duration = 0.01)
       Async do |task|
         key_code = KEY_CODES[direction]
