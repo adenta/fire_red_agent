@@ -10,6 +10,7 @@ module Locomotion
   class Charter
     def self.list_destinations
       map_events = Locomotion::EventReader.parse_map_events
+      map_cells = Locomotion::MapReader.fetch_map_cells
 
       events = []
 
@@ -70,7 +71,13 @@ module Locomotion
         }
       end
 
-      events
+      events.map do |event|
+        {
+          x: event[:x],
+          y: event[:y],
+          metatile_behavior: map_cells[event[:y]][event[:x]].metatile_behavior
+        }
+      end
     end
 
     def self.chart_path(destination)
@@ -88,12 +95,6 @@ module Locomotion
       path = finder.find_path(start_node, end_node, grid)
 
       raise PathNotFoundError if path.nil?
-
-      ap path.last
-      ap path.last
-      ap path.last
-      ap path.last
-      ap path.last
 
       path.each_cons(2) do |node, next_node|
         dx = next_node.x - node.x
