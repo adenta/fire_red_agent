@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Locomotion
+module Game
   class PathNotFoundError < StandardError
     def initialize(msg = 'Path not found')
       super
@@ -9,8 +9,8 @@ module Locomotion
 
   class Charter
     def self.list_destinations
-      map_events = Locomotion::EventReader.parse_map_events
-      map_cells = Locomotion::MapReader.fetch_map_cells
+      map_events = Game::EventReader.parse_map_events
+      map_cells = Game::MapReader.fetch_map_cells
 
       events = []
 
@@ -84,9 +84,9 @@ module Locomotion
       destination_x = destination[:x]
       destination_y = destination[:y]
 
-      map_cells = Locomotion::MapReader.fetch_map_cells
+      map_cells = Game::MapReader.fetch_map_cells
       grid = Pathfinding::Grid.new(map_cells)
-      player_location = Locomotion::MapReader.fetch_player_location
+      player_location = Game::MapReader.fetch_player_location
 
       start_node = grid.node(player_location[:x], player_location[:y])
       end_node = grid.node(destination_x, destination_y)
@@ -114,33 +114,33 @@ module Locomotion
       last_metatile_behavior = path.last.map_cell.metatile_behavior
 
       case last_metatile_behavior
-      when Locomotion::MetatileBehaviors::MB_DOWN_LEFT_STAIR_WARP
+      when Game::MetatileBehaviors::MB_DOWN_LEFT_STAIR_WARP
         Retroarch::KeyboardService.left
         Retroarch::KeyboardService.left
         Retroarch::KeyboardService.left
 
-      when Locomotion::MetatileBehaviors::MB_DOWN_RIGHT_STAIR_WARP
+      when Game::MetatileBehaviors::MB_DOWN_RIGHT_STAIR_WARP
         Retroarch::KeyboardService.right
         Retroarch::KeyboardService.right
         Retroarch::KeyboardService.right
 
-      when Locomotion::MetatileBehaviors::MB_UP_LEFT_STAIR_WARP
+      when Game::MetatileBehaviors::MB_UP_LEFT_STAIR_WARP
         Retroarch::KeyboardService.left
         Retroarch::KeyboardService.left
         Retroarch::KeyboardService.left
 
-      when Locomotion::MetatileBehaviors::MB_UP_RIGHT_STAIR_WARP
+      when Game::MetatileBehaviors::MB_UP_RIGHT_STAIR_WARP
         Retroarch::KeyboardService.right
         Retroarch::KeyboardService.right
         Retroarch::KeyboardService.right
 
-      when Locomotion::MetatileBehaviors::MB_EAST_ARROW_WARP
+      when Game::MetatileBehaviors::MB_EAST_ARROW_WARP
         Retroarch::KeyboardService.right
-      when Locomotion::MetatileBehaviors::MB_WEST_ARROW_WARP
+      when Game::MetatileBehaviors::MB_WEST_ARROW_WARP
         Retroarch::KeyboardService.left
-      when Locomotion::MetatileBehaviors::MB_NORTH_ARROW_WARP
+      when Game::MetatileBehaviors::MB_NORTH_ARROW_WARP
         Retroarch::KeyboardService.up
-      when Locomotion::MetatileBehaviors::MB_SOUTH_ARROW_WARP
+      when Game::MetatileBehaviors::MB_SOUTH_ARROW_WARP
         Retroarch::KeyboardService.down
       end
     end

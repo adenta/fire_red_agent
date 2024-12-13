@@ -1,4 +1,4 @@
-module Locomotion
+module Game
   class MetatileBehaviors
     MB_NORMAL = 'MB_NORMAL'.freeze
     MB_UNUSED_01 = 'MB_UNUSED_01'.freeze

@@ -1,4 +1,4 @@
-module Locomotion
+module Game
   G_BACKUP_MAP_DATA = 0x02031dfc
   G_BACKUP_MAP_DATA_LENGTH = 0x2800
 
@@ -47,7 +47,7 @@ module Locomotion
 
       grid = tiles.each_slice(row_size).to_a
 
-      # parsed_events = Locomotion::EventReader.parse_map_events
+      # parsed_events = Game::EventReader.parse_map_events
 
       # all_events = parsed_events[:object_events] + parsed_events[:warps] + parsed_events[:coord_events] + parsed_events[:bg_events]
 
@@ -58,10 +58,10 @@ module Locomotion
       grid.map do |row|
         row.map do |tile|
           behavior_id = metatile_behaviors[tile.metatile_id].rjust(2, '0').upcase
-          tile.metatile_behavior = Locomotion::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
+          tile.metatile_behavior = Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
           raise 'Must have a behavior' unless tile.metatile_behavior
 
-          Locomotion::MapCell.new(tile, [])
+          Game::MapCell.new(tile, [])
         end
       end
     end
@@ -83,7 +83,7 @@ module Locomotion
       fetch_map_cells.map do |row|
         row.map do |cell|
           behavior_id = metatile_behaviors[cell.metatile_id]
-          Locomotion::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase] || ' '
+          Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase] || ' '
         end.join(', ')
       end
     end

@@ -1,9 +1,9 @@
 namespace :red do
   task loop: :environment do
     loop do
-      destinations = Locomotion::Charter.list_destinations.to_json
-      player_location = Locomotion::MapReader.fetch_player_location.to_json
-      collisions = Locomotion::MapReader.fetch_colisions.to_json
+      destinations = Game::Charter.list_destinations.to_json
+      player_location = Game::MapReader.fetch_player_location.to_json
+      collisions = Game::MapReader.fetch_colisions.to_json
 
       prompt = <<~PROMPT
         You are located on a grid at position #{player_location}.
@@ -33,13 +33,13 @@ namespace :red do
       x = response.parsed['x']
       y = response.parsed['y']
 
-      Locomotion::Charter.chart_path(x: x, y: y)
+      Game::Charter.chart_path(x: x, y: y)
     end
   end
 
   task description: :environment do
-    destinations = Locomotion::Charter.list_destinations.to_json
-    player_location = Locomotion::MapReader.fetch_player_location.to_json
+    destinations = Game::Charter.list_destinations.to_json
+    player_location = Game::MapReader.fetch_player_location.to_json
 
     prompt = <<~PROMPT
       You are located on a grid at position #{player_location}.

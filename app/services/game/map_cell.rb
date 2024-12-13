@@ -1,4 +1,4 @@
-module Locomotion
+module Game
   class MapCell
     NIL_METATILE_ID = 1023
 

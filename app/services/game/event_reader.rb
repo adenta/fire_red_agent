@@ -1,7 +1,7 @@
 require 'stringio'
 require 'json'
 
-module Locomotion
+module Game
   class EventReader
     POINTER_SIZE = 4 # 32-bit pointers
 
@@ -78,7 +78,7 @@ module Locomotion
     BgEvent = Struct.new(:x, :y, :elevation, :kind, :hidden_item_or_script)
 
     def self.parse_map_events
-      base_address = Locomotion::MapReader.fetch_map_header[:events]
+      base_address = Game::MapReader.fetch_map_header[:events]
 
       fixed_data = read_bytes(base_address, FIXED_PART_SIZE)
       io = StringIO.new(fixed_data)

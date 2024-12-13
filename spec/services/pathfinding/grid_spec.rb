@@ -4,9 +4,9 @@ RSpec.describe Pathfinding::Grid, type: :service do
   describe 'integration' do
     it 'returns the correct path' do
       raise NotImplementedError
-      matrix = Locomotion::MapReader.fetch_map_cells
+      matrix = Game::MapReader.fetch_map_cells
       grid = Pathfinding::Grid.new(matrix)
-      player_location = Locomotion::MapReader.fetch_player_location
+      player_location = Game::MapReader.fetch_player_location
 
       start_node = grid.node(player_location[:x], player_location[:y])
       end_node = grid.node(player_location[:x] + 1, player_location[:y] + 1)
