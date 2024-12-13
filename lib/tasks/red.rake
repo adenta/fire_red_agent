@@ -12,7 +12,9 @@ namespace :red do
         #{destinations}
 
 
-        which of the destinations should you walk towards if you want to go outside?
+        which of the destinations should you walk towards if you want to go outside? Always walk down stairs, never up stairs.
+
+        You can only walk towards one of these given destinations, and nowhere else.
       PROMPT
 
       client = SchemaClient.new

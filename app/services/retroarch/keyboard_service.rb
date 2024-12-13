@@ -43,6 +43,7 @@ module Retroarch
     end
 
     def self.send_key_event(direction, duration = 0.01)
+      ap "sending button command #{direction}"
       Async do |task|
         key_code = KEY_CODES[direction]
         raise ArgumentError, 'Invalid direction' unless key_code
