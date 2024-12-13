@@ -1,24 +1,7 @@
 require 'rails_helper'
+require 'support/firered_bedroom_helper'
 
 RSpec.describe Game::MapReader, type: :service do
-  @pid = nil
-  before(:each) do
-    command = '/Applications/RetroArch.app/Contents/MacOS/RetroArch -L "/Users/andrew/Library/Application Support/RetroArch/cores/mgba_libretro.dylib" "./db/data/games/firered.gba" --appendconfig="/Users/andrew/fire_red_agent/db/data/retroarch_config/savestate.cfg"'
-    @pid = spawn(command, out: '/dev/null', err: '/dev/null') # Redirects stdout and stderr
-    Process.detach(@pid) # Detaches the process
-    sleep(2) # Wait for initialization, adjust as necessary
-  end
-
-  after(:each) do
-    if @pid
-      Process.kill('KILL', @pid) # Sends the kill signal
-      begin
-        Process.wait(@pid)
-      rescue StandardError
-        nil
-      end # Cleans up the process to avoid zombies
-    end
-  end
   describe '.fetch_map_header' do
     it 'returns the correct map header data' do
       expected_map_header = {
