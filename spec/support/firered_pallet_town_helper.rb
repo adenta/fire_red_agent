@@ -1,10 +1,10 @@
-module FireredBedroomHelper
+module FireredPalletTownHelper
   def self.start_retroarch
     command = [
       '/Applications/RetroArch.app/Contents/MacOS/RetroArch',
       '-L "/Users/andrew/Library/Application Support/RetroArch/cores/mgba_libretro.dylib"',
       Rails.root.join('db', 'data', 'games', 'firered.gba').to_s,
-      "--appendconfig=#{Rails.root.join('db', 'data', 'retroarch_config', 'bedroom-savestate.cfg')}"
+      "--appendconfig=#{Rails.root.join('db', 'data', 'retroarch_config', 'pallettown-savestate.cfg')}"
     ].join(' ')
 
     @pid = spawn(command, out: '/dev/null', err: '/dev/null') # Redirects stdout and stderr
@@ -33,10 +33,10 @@ end
 
 RSpec.configure do |config|
   config.before(:each) do
-    FireredBedroomHelper.start_retroarch
+    FireredPalletTownHelper.start_retroarch
   end
 
   config.after(:each) do
-    FireredBedroomHelper.stop_retroarch
+    FireredPalletTownHelper.stop_retroarch
   end
 end
