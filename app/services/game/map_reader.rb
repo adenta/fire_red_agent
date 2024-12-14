@@ -210,27 +210,6 @@ module Game
       primary_behaviors + secondary_behaviors
     end
 
-    # def self.fetch_primary_tileset
-    #   memory_data = Retroarch::MemoryReader.read_binary_bytes(fetch_primary_tileset_meta[:metatiles],
-    #                                                           MAX_METATILE_ATTRIBUTE_LENGTH)
-
-    #   attributes = []
-    #   memory_data.split('').each_slice(4) do |slice|
-    #     raw = slice.join.unpack1('L<')
-    #     attributes << {
-    #       behavior: (raw & 0x000001ff) >> 0,
-    #       terrain: (raw & 0x00003e00) >> 9,
-    #       attribute_2: (raw & 0x0003c000) >> 14,
-    #       attribute_3: (raw & 0x00fc0000) >> 18,
-    #       encounter_type: (raw & 0x07000000) >> 24,
-    #       attribute_5: (raw & 0x18000000) >> 27,
-    #       layer_type: (raw & 0x60000000) >> 29,
-    #       attribute_7: (raw & 0x80000000) >> 31
-    #     }
-    #   end
-    #   attributes
-    # end
-
     private_class_method def self.parse_tile_data(raw)
       metatile_id = raw & MAPGRID_METATILE_ID_MASK
       collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
