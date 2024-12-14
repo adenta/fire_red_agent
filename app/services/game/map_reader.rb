@@ -36,23 +36,60 @@ module Game
       data = fetch_map_data
       row_size = fetch_map_dimensions[:map_width]
       metatile_behaviors = TileReader.fetch_metatile_behaviors
+      map_events = EventReader.parse_map_events
 
       grid = data.each_slice(row_size).to_a
 
-      grid.map do |row|
-        row.map do |tile|
+      map_cell_grid = grid.map.with_index do |row, y|
+        row.map.with_index do |tile, x|
+          events = []
           behavior_id = metatile_behaviors[tile[:metatile_id]].rjust(2, '0').upcase
           tile[:metatile_behavior] = Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
           raise 'Must have a behavior' unless tile[:metatile_behavior]
+
+          map_events.coord_events.each do |event|
+            events << event if event.x == x && event.y == y
+            map_events.coord_events.delete(event)
+            puts "cord found at #{event.x}, #{event.y}"
+          end
+
+          map_events.bg_events.each do |event|
+            events << event if event.x == x && event.y == y
+            map_events.bg_events.delete(event)
+            puts "bg found at #{event.x}, #{event.y}"
+          end
+
+          map_events.object_events.each do |event|
+            events << event if event.x == x && event.y == y
+            map_events.object_events.delete(event)
+            puts "object found at #{event.x}, #{event.y}"
+          end
+
+          map_events.warps.each do |event|
+            events << event if event.x == x && event.y == y
+            map_events.warps.delete(event)
+            puts "warp found at #{event.x}, #{event.y}"
+          end
 
           Game::MapCell.new(
             metatile_id: tile[:metatile_id],
             collision: tile[:collision],
             elevation: tile[:elevation],
-            events: []
+            metatile_behavior: tile[:metatile_behavior],
+            events: events
           )
         end
       end
+
+      raise "Unprocessed coord events: #{map_events.coord_events.map(&:to_h)}" if map_events.coord_events.any?
+
+      raise "Unprocessed bg events: #{map_events.bg_events.map(&:to_h)}" if map_events.bg_events.any?
+
+      raise "Unprocessed object events: #{map_events.object_events.map(&:to_h)}" if map_events.object_events.any?
+
+      raise "Unprocessed warps: #{map_events.warps.map(&:to_h)}" if map_events.warps.any?
+
+      map_cell_grid
     end
 
     def self.fetch_map_dimensions

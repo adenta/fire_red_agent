@@ -75,8 +75,10 @@ module Pathfinding
                     end_chr
                   elsif path&.include?(current)
                     path_chr
-                  elsif current.walkable?
+                  elsif current&.walkable?
                     empty_chr
+                  elsif current&.events&.any?
+                    '!'
                   else
                     block_chr
                   end
@@ -147,6 +149,8 @@ module Pathfinding
         nodes << []
         width.times do |x|
           map_cell = matrix[y][x]
+          # raise "Map cell #{x}, #{y} cannot be nil!!" if map_cell.nil?
+
           nodes[y] << Node.new(x, y, map_cell)
         end
       end

@@ -3,6 +3,7 @@ require 'json'
 
 module Game
   class EventReader
+    OFFSET = 0
     POINTER_SIZE = 4 # 32-bit pointers
 
     # Sizes deduced from the given C structs and alignment on GBA
@@ -62,7 +63,18 @@ module Game
       :warps,
       :coord_events,
       :bg_events
-    )
+    ) do
+      def to_s
+        <<~STRING
+          ~~~
+          object_event_count: #{object_event_count},
+          warp_count: #{warp_count},
+          coord_event_count: #{coord_event_count},
+          bg_event_count: #{bg_event_count},
+          ~~~
+        STRING
+      end
+    end
 
     ObjectEventTemplate = Struct.new(
       :local_id, :graphics_id, :kind, :x, :y,
@@ -121,8 +133,8 @@ module Game
         graphics_id = io.read(1).unpack1('C')
         kind = io.read(1).unpack1('C')
         io.read(1) # padding
-        x = io.read(2).unpack1('s<') + 7
-        y = io.read(2).unpack1('s<') + 7
+        x = io.read(2).unpack1('s<') + OFFSET
+        y = io.read(2).unpack1('s<') + OFFSET
 
         elevation = nil
         movement_type = nil
@@ -139,21 +151,21 @@ module Game
           # Normal
           elevation = io.read(1).unpack1('C')
           movement_type = io.read(1).unpack1('C')
-          range_word = io.read(2).unpack1('s<') + 7
+          range_word = io.read(2).unpack1('s<')
           movement_range_x = range_word & 0xF
           movement_range_y = (range_word >> 4) & 0xF
-          trainer_type = io.read(2).unpack1('s<') + 7
-          trainer_range_berry_tree_id = io.read(2).unpack1('s<') + 7
+          trainer_type = io.read(2).unpack1('s<')
+          trainer_range_berry_tree_id = io.read(2).unpack1('s<')
         else
           # Clone
           target_local_id = io.read(1).unpack1('C')
           io.read(3) # padding
-          target_map_num = io.read(2).unpack1('s<') + 7
-          target_map_group = io.read(2).unpack1('s<') + 7
+          target_map_num = io.read(2).unpack1('s<')
+          target_map_group = io.read(2).unpack1('s<')
         end
 
         script = io.read(4).unpack1('L<')
-        flag_id = io.read(2).unpack1('s<') + 7
+        flag_id = io.read(2).unpack1('s<')
         io.read(2) # final padding
 
         ObjectEventTemplate.new(
@@ -172,8 +184,8 @@ module Game
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('s<') + 7
-        y = io.read(2).unpack1('s<') + 7
+        x = io.read(2).unpack1('s<') + OFFSET
+        y = io.read(2).unpack1('s<') + OFFSET
         elevation = io.read(1).unpack1('C')
         warp_id = io.read(1).unpack1('C')
         map_num = io.read(1).unpack1('C')
@@ -204,12 +216,12 @@ module Game
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('s<') + 7
-        y = io.read(2).unpack1('s<') + 7
+        x = io.read(2).unpack1('s<') + OFFSET
+        y = io.read(2).unpack1('s<') + OFFSET
         elevation = io.read(1).unpack1('C')
         padding = io.read(1) # alignment padding
-        trigger = io.read(2).unpack1('s<') + 7
-        index = io.read(2).unpack1('s<') + 7
+        trigger = io.read(2).unpack1('s<')
+        index = io.read(2).unpack1('s<')
         io.read(2) # another padding for alignment
         script = io.read(4).unpack1('L<')
 
@@ -224,8 +236,8 @@ module Game
       io = StringIO.new(data)
 
       count.times.map do
-        x = io.read(2).unpack1('s<') + 7
-        y = io.read(2).unpack1('s<') + 7
+        x = io.read(2).unpack1('s<') + OFFSET
+        y = io.read(2).unpack1('s<') + OFFSET
         elevation = io.read(1).unpack1('C')
         kind = io.read(1).unpack1('C')
         io.read(2) # padding for alignment

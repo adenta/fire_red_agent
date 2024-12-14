@@ -26,10 +26,22 @@ module Pathfinding
       @x = x
       @y = y
       @map_cell = map_cell
+
+      # raise "Map cell cannot be nil. #{x},#{y} was defined without a map cell" if @map_cell.nil?
+    end
+
+    def events
+      @map_cell.events
+    rescue NoMethodError
+      puts "Map cell is nil at #{@x}, #{@y}"
+      []
     end
 
     def walkable?
       @map_cell.walkable?
+    rescue NoMethodError
+      puts "Map cell is nil at #{@x}, #{@y}"
+      false
     end
 
     #
