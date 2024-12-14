@@ -18,7 +18,11 @@ module Game
 
   MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
 
-  MapData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior)
+  MapData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior) do
+    def to_s
+      collision.to_s
+    end
+  end
 
   class MapReader
     def self.fetch_map_data
@@ -113,40 +117,11 @@ module Game
       }
     end
 
-    def self.tileset_metas
-      keys = %i[primary_tileset secondary_tileset]
-      rv = {}
-      keys.each do |key|
-        tileset_id = fetch_map_layout[key]
-        memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_id, 0x18)
-
-        is_compressed = memory_data.getbyte(0) != 0
-        is_secondary = memory_data.getbyte(1) != 0
-        tiles = memory_data[4, 4].unpack1('L<')
-        palettes = memory_data[8, 4].unpack1('L<')
-        metatiles = memory_data[12, 4].unpack1('L<')
-        callback = memory_data[16, 4].unpack1('L<')
-        metatile_attributes = memory_data[20, 4].unpack1('L<')
-
-        rv[key] = {
-          is_compressed: is_compressed,
-          is_secondary: is_secondary,
-          tiles: tiles,
-          palettes: palettes,
-          metatiles: metatiles,
-          callback: callback,
-          metatile_attributes: metatile_attributes
-        }
-      end
-
-      rv
-    end
-
     private_class_method def self.parse_tile_data(raw)
       metatile_id = raw & MAPGRID_METATILE_ID_MASK
       collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
       elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
-      MapReader::MapData.new(metatile_id, collision, elevation)
+      MapData.new(metatile_id, collision, elevation)
     end
   end
 end
