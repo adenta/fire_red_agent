@@ -18,40 +18,39 @@ module Game
 
   MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
 
-  MapData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior) do
-    def to_s
-      collision.to_s
-    end
-  end
-
   class MapReader
     def self.fetch_map_data
       memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
-      tiles = []
+      data = []
       (0...(memory_data.bytesize / 2)).each do |i|
         low_byte  = memory_data.getbyte(i * 2)
         high_byte = memory_data.getbyte(i * 2 + 1)
         raw       = (high_byte << 8) | low_byte
-        tiles << parse_tile_data(raw)
+        data << parse_data(raw)
       end
-      tiles
+      data
     end
 
     def self.fetch_map_cells
-      tiles = fetch_map_data
+      data = fetch_map_data
       row_size = fetch_map_dimensions[:map_width]
       metatile_behaviors = TileReader.fetch_metatile_behaviors
 
-      grid = tiles.each_slice(row_size).to_a
+      grid = data.each_slice(row_size).to_a
 
       grid.map do |row|
         row.map do |tile|
-          behavior_id = metatile_behaviors[tile.metatile_id].rjust(2, '0').upcase
-          tile.metatile_behavior = Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
-          raise 'Must have a behavior' unless tile.metatile_behavior
+          behavior_id = metatile_behaviors[tile[:metatile_id]].rjust(2, '0').upcase
+          tile[:metatile_behavior] = Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
+          raise 'Must have a behavior' unless tile[:metatile_behavior]
 
-          Game::MapCell.new(tile, [])
+          Game::MapCell.new(
+            metatile_id: tile[:metatile_id],
+            collision: tile[:collision],
+            elevation: tile[:elevation],
+            events: []
+          )
         end
       end
     end
@@ -117,11 +116,15 @@ module Game
       }
     end
 
-    private_class_method def self.parse_tile_data(raw)
+    private_class_method def self.parse_data(raw)
       metatile_id = raw & MAPGRID_METATILE_ID_MASK
       collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
       elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
-      MapData.new(metatile_id, collision, elevation)
+      {
+        metatile_id: metatile_id,
+        collision: collision,
+        elevation: elevation
+      }
     end
   end
 end
