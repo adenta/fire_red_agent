@@ -18,11 +18,24 @@ module Game
 
   MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
 
-  TileData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior)
+  MapData = Struct.new(:metatile_id, :collision, :elevation, :metatile_behavior)
 
   class MapReader
+    def self.fetch_map_data
+      memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
+
+      tiles = []
+      (0...(memory_data.bytesize / 2)).each do |i|
+        low_byte  = memory_data.getbyte(i * 2)
+        high_byte = memory_data.getbyte(i * 2 + 1)
+        raw       = (high_byte << 8) | low_byte
+        tiles << parse_tile_data(raw)
+      end
+      tiles
+    end
+
     def self.fetch_map_cells
-      tiles = TileReader.fetch_tile_data
+      tiles = fetch_map_data
       row_size = fetch_map_dimensions[:map_width]
       metatile_behaviors = TileReader.fetch_metatile_behaviors
 
@@ -127,6 +140,13 @@ module Game
       end
 
       rv
+    end
+
+    private_class_method def self.parse_tile_data(raw)
+      metatile_id = raw & MAPGRID_METATILE_ID_MASK
+      collision   = (raw & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT
+      elevation   = (raw & MAPGRID_ELEVATION_MASK) >> MAPGRID_ELEVATION_SHIFT
+      MapReader::MapData.new(metatile_id, collision, elevation)
     end
   end
 end
