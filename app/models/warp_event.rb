@@ -11,7 +11,11 @@ class WarpEvent
     @warp_type = warp_type
   end
 
+  def map_group_num_key
+    "group#{map_group}_num#{map_num}".to_sym
+  end
+
   def to_s
-    raise NotImplementedError
+    "Destination: #{Game::MapGroup::MAP_GROUP[map_group_num_key]}"
   end
 end

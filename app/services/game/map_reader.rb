@@ -79,6 +79,10 @@ module Game
       map_cell_grid.first(row_count)
     end
 
+    def self.fetch_map_name
+      'MAP_' + SymbolReader.read_symbol(fetch_map_header[:map_layout])[:name].gsub('_LAYOUT', '')
+    end
+
     def self.fetch_map_dimensions
       memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
 
