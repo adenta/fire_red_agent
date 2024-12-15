@@ -44,7 +44,7 @@ module Game
       puts end_node
 
       finder = Pathfinding::AStarFinder.new(Pathfinding::Heuristic.method(:manhattan))
-      path = finder.find_path(start_node, end_node, grid)
+      path = finder.find_closest_path(start_node, end_node, grid)
 
       raise PathNotFoundError if path.nil?
 

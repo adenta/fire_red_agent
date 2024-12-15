@@ -37,12 +37,12 @@ class BaseSchema
 
   # Define a number property
   def number(name, description: nil)
-    add_property(name, { type: 'number', description: }).compact
+    add_property(name, { type: 'number', description: }.compact)
   end
 
   # Define a boolean property
-  def boolean(name)
-    add_property(name, { type: 'boolean' })
+  def boolean(name, description: nil)
+    add_property(name, { type: 'boolean', description: }.compact)
   end
 
   # Define an object property

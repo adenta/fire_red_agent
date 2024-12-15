@@ -1,30 +1,56 @@
 # frozen_string_literal: true
 
-#
-# File: astar.rb
-# Author: Quentin Deschamps
-# Date: August 2020
-#
-
 module Pathfinding
-  #
-  # A* path-finder.
-  #
   class AStarFinder
-    #
-    # Initializes the A* path-finder. Params:
-    # * +heuristic+: heuristic function (see the +Heuristic+ module)
-    #
     def initialize(
       heuristic = Pathfinding::Heuristic.method(:manhattan)
     )
       @heuristic = heuristic
     end
 
-    #
-    # Finds and returns the path as a list of node objects.
-    #
     def find_path(start_node, end_node, grid)
+      pathfinding_helper(start_node, end_node, grid) || []
+    end
+
+    def find_closest_path(start_node, end_node, grid)
+      path = pathfinding_helper(start_node, end_node, grid)
+      return path if path
+
+      # Find the nearest reachable node
+      visited = {}
+      open_set = [start_node]
+      closest_node = start_node
+      min_distance = @heuristic.call(
+        (start_node.x - end_node.x).abs, (start_node.y - end_node.y).abs
+      )
+
+      until open_set.empty?
+        current = open_set.shift
+        visited[current] = true
+
+        grid.neighbors(current).each do |neighbor|
+          next if visited[neighbor]
+
+          distance = @heuristic.call(
+            (neighbor.x - end_node.x).abs, (neighbor.y - end_node.y).abs
+          )
+
+          if distance < min_distance
+            closest_node = neighbor
+            min_distance = distance
+          end
+
+          open_set << neighbor unless visited[neighbor]
+        end
+      end
+
+      # Re-run pathfinding to the closest node
+      pathfinding_helper(start_node, closest_node, grid) || [start_node]
+    end
+
+    private
+
+    def pathfinding_helper(start_node, end_node, grid)
       open_set = [start_node]
       came_from = {}
       g_score = {}
@@ -39,14 +65,10 @@ module Pathfinding
       )
 
       until open_set.empty?
-        current = open_set[0]
-        open_set.each do |node|
-          current = node if f_score[node] < f_score[current]
-        end
-
+        current = open_set.min_by { |node| f_score[node] }
         return reconstruct_path(came_from, current) if current == end_node
 
-        current = open_set.delete_at(open_set.index(current))
+        open_set.delete(current)
 
         grid.neighbors(current).each do |neighbor|
           tentative_g_score = g_score[current] + d(current, neighbor)
@@ -60,18 +82,13 @@ module Pathfinding
           open_set << neighbor unless open_set.include?(neighbor)
         end
       end
+      nil
     end
 
-    #
-    # Returns the distance between two nodes.
-    #
     def d(n1, n2)
       n1.x == n2.x || n1.y == n2.y ? 1 : Math.sqrt(2)
     end
 
-    #
-    # Reconstructs the path from the current node.
-    #
     def reconstruct_path(came_from, current)
       total_path = [current]
       while came_from.include?(current)

@@ -12,8 +12,8 @@ module Retroarch
       down: 125,
       left: 123,
       right: 124,
-      a: 0,
-      b: 11
+      a: 7, # 7 is the key code for 'x'
+      b: 6 # 6 is the key code for 'z'
     }.freeze
 
     APPLICATION_NAME = 'RetroArch'

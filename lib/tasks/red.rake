@@ -1,10 +1,11 @@
 namespace :red do
   task loop: :environment do
     past_map_layouts = [Game::MapReader.fetch_map_header[:map_layout].to_s(16)]
-
+    memory = []
     loop do
       loop do
         text = Intelligence::TextReader.read_text
+        memory << text
         break if text.empty?
 
         ap text
@@ -27,6 +28,8 @@ namespace :red do
         There are several destinations you can travel to:
         #{destinations}
 
+        Here is a log of your previous conversations so far: #{memory.join("\n")}
+
         You can only walk towards one of these given destinations, and nowhere else.
       PROMPT
 
@@ -45,8 +48,10 @@ namespace :red do
 
       x = response.parsed['x']
       y = response.parsed['y']
+      interact = response.parsed['interact']
 
       Game::Charter.chart_path(x: x, y: y)
+      Retroarch::KeyboardService.a if interact
     end
   end
 
