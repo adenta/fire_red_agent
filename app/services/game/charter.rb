@@ -16,6 +16,7 @@ module Game
 
       map_events.coord_events.each do |event|
         events << {
+          name: event.class.name.split('::').last,
           x: event.x,
           y: event.y,
           type: 'coord_event',
@@ -28,6 +29,7 @@ module Game
 
       map_events.bg_events.each do |event|
         events << {
+          name: event.class.name.split('::').last,
           x: event.x,
           y: event.y,
           type: 'bg_event',
@@ -39,6 +41,7 @@ module Game
 
       map_events.object_events.each do |event|
         events << {
+          name: event.class.name.split('::').last,
           x: event.x,
           y: event.y,
           type: 'object_event',
@@ -61,6 +64,8 @@ module Game
 
       map_events.warps.each do |event|
         events << {
+          name: event.class.name.split('::').last,
+
           x: event.x,
           y: event.y,
           type: 'warp_event',
@@ -75,7 +80,9 @@ module Game
         {
           x: event[:x],
           y: event[:y],
-          metatile_behavior: map_cells[event[:y]][event[:x]].metatile_behavior
+          metatile_behavior: map_cells[event[:y]][event[:x]].metatile_behavior,
+          description: event.to_s,
+          type: event[:name]
         }
       end
     end

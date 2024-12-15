@@ -85,7 +85,31 @@ module Game
 
     WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group, :warp_type)
 
-    CoordEvent = Struct.new(:x, :y, :elevation, :trigger, :index, :script)
+    class CoordEvent
+      attr_accessor :x, :y, :elevation, :trigger, :index, :script
+
+      def initialize(x, y, elevation, trigger, index, script)
+        @x = x
+        @y = y
+        @elevation = elevation
+        @trigger = trigger
+        @index = index
+        @script = script
+      end
+
+      def to_s
+        <<~STRING
+          ~~~
+          x: #{x},
+          y: #{y},
+          elevation: #{elevation},
+          trigger: #{trigger},
+          index: #{index},
+          script: #{script}
+          ~~~
+        STRING
+      end
+    end
 
     BgEvent = Struct.new(:x, :y, :elevation, :kind, :hidden_item_or_script)
 
