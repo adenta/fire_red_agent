@@ -3,6 +3,16 @@ namespace :red do
     past_map_layouts = [Game::MapReader.fetch_map_header[:map_layout].to_s(16)]
 
     loop do
+      loop do
+        text = Intelligence::TextReader.read_text
+        break if text.empty?
+
+        ap text
+
+        Retroarch::KeyboardService.a
+        sleep 4
+      end
+      ap 'continuing the script'
       destinations = Game::Charter.list_destinations.to_json
       player_location = Game::MapReader.fetch_player_location.to_json
       current_map_layout = Game::MapReader.fetch_map_header[:map_layout].to_s(16)
