@@ -44,10 +44,12 @@ module Game
 
       map_cell_grid = grid.map do |row|
         row.map do |tile|
-          events = []
           behavior_id = metatile_behaviors[tile[:metatile_id]].rjust(2, '0').upcase
           tile[:metatile_behavior] = Game::MetatileBehaviors::METATILE_BEHAVIORS[behavior_id.upcase]
-          raise 'Must have a behavior' unless tile[:metatile_behavior]
+          unless tile[:metatile_behavior]
+            tile[:metatile_behavior] = MetatileBehaviors::MB_NORMAL
+            raise "Unknown metatile behavior: #{behavior_id}" unless tile[:metatile_id] == 1023
+          end
 
           Game::MapCell.new(
             metatile_id: tile[:metatile_id],

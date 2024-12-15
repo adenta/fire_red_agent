@@ -81,6 +81,7 @@ module Game
     end
 
     def self.chart_path(destination)
+      puts destination
       destination_x = destination[:x]
       destination_y = destination[:y]
 
@@ -93,6 +94,9 @@ module Game
 
       start_node = grid.node(player_location[:x], player_location[:y])
       end_node = grid.node(destination_x, destination_y)
+
+      puts start_node
+      puts end_node
 
       finder = Pathfinding::AStarFinder.new(Pathfinding::Heuristic.method(:manhattan))
       path = finder.find_path(start_node, end_node, grid)

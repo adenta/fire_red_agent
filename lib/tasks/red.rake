@@ -17,8 +17,6 @@ namespace :red do
         There are several destinations you can travel to:
         #{destinations}
 
-        which of the destinations should you walk towards if you want to go outside? Always walk down stairs, never up stairs.
-
         You can only walk towards one of these given destinations, and nowhere else.
       PROMPT
 
