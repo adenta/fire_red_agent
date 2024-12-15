@@ -71,14 +71,14 @@ module Pathfinding
           current = node(x, y)
           line += if current == start_node
                     start_chr
+                  elsif current&.events&.any?
+                    '!'
                   elsif current == end_node
                     end_chr
                   elsif path&.include?(current)
                     path_chr
                   elsif current&.walkable?
                     empty_chr
-                  elsif current&.events&.any?
-                    '!'
                   else
                     block_chr
                   end

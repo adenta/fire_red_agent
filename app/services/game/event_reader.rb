@@ -3,7 +3,7 @@ require 'json'
 
 module Game
   class EventReader
-    OFFSET = 0
+    OFFSET = 7
     POINTER_SIZE = 4 # 32-bit pointers
 
     # Sizes deduced from the given C structs and alignment on GBA
