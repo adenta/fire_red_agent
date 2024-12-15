@@ -61,6 +61,7 @@ module Pathfinding
     def to_s(
       path = nil, start_node = nil, end_node = nil, border = true,
       start_chr = 's', end_chr = 'e', path_chr = 'x', empty_chr = ' ', block_chr = '#'
+
     )
       data = []
       data << '+' + '-' * @width + '+' if border

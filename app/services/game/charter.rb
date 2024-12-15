@@ -33,12 +33,12 @@ module Game
       map_cells = Game::MapReader.fetch_map_cells
 
       grid = Pathfinding::Grid.new(map_cells)
-
-      puts grid
       player_location = Game::MapReader.fetch_player_location
 
       start_node = grid.node(player_location[:x], player_location[:y])
       end_node = grid.node(destination_x, destination_y)
+
+      puts grid.to_s(nil, start_node, end_node)
 
       puts start_node
       puts end_node
