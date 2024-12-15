@@ -89,7 +89,6 @@ module Game
       grid = Pathfinding::Grid.new(map_cells)
 
       puts grid
-      raise NotImplementedError
       player_location = Game::MapReader.fetch_player_location
 
       start_node = grid.node(player_location[:x], player_location[:y])

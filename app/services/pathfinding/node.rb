@@ -33,14 +33,14 @@ module Pathfinding
     def events
       @map_cell.events
     rescue NoMethodError
-      puts "Map cell is nil at #{@x}, #{@y}"
+      puts "Node::events Map cell is nil at #{@x}, #{@y}"
       []
     end
 
     def walkable?
       @map_cell.walkable?
     rescue NoMethodError
-      puts "Map cell is nil at #{@x}, #{@y}"
+      puts "NOde::walkable? Map cell is nil at #{@x}, #{@y}"
       false
     end
 

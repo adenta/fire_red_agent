@@ -35,6 +35,8 @@ module Game
     def self.fetch_map_cells
       data = fetch_map_data
       row_size = fetch_map_dimensions[:map_width]
+      row_count = fetch_map_dimensions[:map_height]
+
       metatile_behaviors = TileReader.fetch_metatile_behaviors
       map_events = EventReader.parse_map_events
 
@@ -72,7 +74,7 @@ module Game
         map_cell_grid[event.y][event.x].events << event
       end
 
-      map_cell_grid
+      map_cell_grid.first(row_count)
     end
 
     def self.fetch_map_dimensions
