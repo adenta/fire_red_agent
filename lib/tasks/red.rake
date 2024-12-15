@@ -1,11 +1,18 @@
 namespace :red do
   task loop: :environment do
+    past_map_layouts = [Game::MapReader.fetch_map_header[:map_layout].to_s(16)]
+
     loop do
       destinations = Game::Charter.list_destinations.to_json
       player_location = Game::MapReader.fetch_player_location.to_json
+      current_map_layout = Game::MapReader.fetch_map_header[:map_layout].to_s(16)
+
+      past_map_layouts << current_map_layout unless past_map_layouts.last == current_map_layout
 
       prompt = <<~PROMPT
         You are located on a grid at position #{player_location}.
+
+        You are currently located at map layout #{current_map_layout}. You have been to the following map layouts: #{past_map_layouts.join(', ')}.
 
         There are several destinations you can travel to:
         #{destinations}
