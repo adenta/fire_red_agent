@@ -12,77 +12,15 @@ module Game
       map_events = Game::EventReader.parse_map_events
       map_cells = Game::MapReader.fetch_map_cells
 
-      events = []
-
-      map_events.coord_events.each do |event|
-        events << {
-          name: event.class.name.split('::').last,
-          x: event.x,
-          y: event.y,
-          type: 'coord_event',
-          elevation: event.elevation,
-          trigger: event.trigger,
-          index: event.index,
-          script: event.script
-        }
-      end
-
-      map_events.bg_events.each do |event|
-        events << {
-          name: event.class.name.split('::').last,
-          x: event.x,
-          y: event.y,
-          type: 'bg_event',
-          elevation: event.elevation,
-          kind: event.kind,
-          hidden_item_or_script: event.hidden_item_or_script
-        }
-      end
-
-      map_events.object_events.each do |event|
-        events << {
-          name: event.class.name.split('::').last,
-          x: event.x,
-          y: event.y,
-          type: 'object_event',
-          local_id: event.local_id,
-          graphics_id: event.graphics_id,
-          kind: event.kind,
-          elevation: event.elevation,
-          movement_type: event.movement_type,
-          movement_range_x: event.movement_range_x,
-          movement_range_y: event.movement_range_y,
-          trainer_type: event.trainer_type,
-          trainer_range_berry_tree_id: event.trainer_range_berry_tree_id,
-          script: event.script,
-          flag_id: event.flag_id,
-          target_local_id: event.target_local_id,
-          target_map_num: event.target_map_num,
-          target_map_group: event.target_map_group
-        }
-      end
-
-      map_events.warps.each do |event|
-        events << {
-          name: event.class.name.split('::').last,
-
-          x: event.x,
-          y: event.y,
-          type: 'warp_event',
-          elevation: event.elevation,
-          warp_id: event.warp_id,
-          map_num: event.map_num,
-          map_group: event.map_group
-        }
-      end
+      events = map_events.unified_events
 
       events.map do |event|
         {
-          x: event[:x],
-          y: event[:y],
-          metatile_behavior: map_cells[event[:y]][event[:x]].metatile_behavior,
+          x: event.x,
+          y: event.y,
+          metatile_behavior: map_cells[event.y][event.x].metatile_behavior,
           description: event.to_s,
-          type: event[:name]
+          type: event.class.name
         }
       end
     end

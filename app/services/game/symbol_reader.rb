@@ -3,10 +3,10 @@ module Game
     def self.read_symbol(address)
       address_as_string =
         if address.is_a?(String)
-          address.downcase
+          address.downcase.rjust(8, '0')
 
         elsif address.is_a?(Integer)
-          address.to_s(16).downcase
+          address.to_s(16).downcase.rjust(8, '0')
         else
           raise ArgumentError, 'Address must be a string or an integer'
         end

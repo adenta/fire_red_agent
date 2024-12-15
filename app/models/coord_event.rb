@@ -11,6 +11,6 @@ class CoordEvent
   end
 
   def to_s
-    'asdf'
+    Game::SymbolReader.read_symbol(script)[:name]
   end
 end

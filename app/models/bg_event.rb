@@ -10,6 +10,6 @@ class BgEvent
   end
 
   def to_s
-    'asdf'
+    Game::SymbolReader.read_symbol(hidden_item_or_script)[:name]
   end
 end

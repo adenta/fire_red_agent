@@ -54,42 +54,6 @@ module Game
     # Total = 12 bytes
     BG_EVENT_SIZE = 12
 
-    MapEvents = Struct.new(
-      :object_event_count,
-      :warp_count,
-      :coord_event_count,
-      :bg_event_count,
-      :object_events,
-      :warps,
-      :coord_events,
-      :bg_events
-    ) do
-      def to_s
-        <<~STRING
-          ~~~
-          object_event_count: #{object_event_count},
-          warp_count: #{warp_count},
-          coord_event_count: #{coord_event_count},
-          bg_event_count: #{bg_event_count},
-          ~~~
-        STRING
-      end
-    end
-
-    # ObjectEventTemplate = Struct.new(
-    #   :local_id, :graphics_id, :kind, :x, :y,
-    #   :elevation, :movement_type, :movement_range_x, :movement_range_y,
-    #   :trainer_type, :trainer_range_berry_tree_id, :script, :flag_id,
-    #   :target_local_id, :target_map_num, :target_map_group
-    # )
-
-    # WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group, :warp_type)
-
-    # CoordEvent = Struct.new(:x, :y, :elevation, :trigger, :index, :script) do
-    # end
-
-    # BgEvent = Struct.new(:x, :y, :elevation, :kind, :hidden_item_or_script)
-
     def self.parse_map_events
       base_address = Game::MapReader.fetch_map_header[:events]
 

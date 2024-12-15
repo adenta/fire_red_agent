@@ -12,6 +12,6 @@ class WarpEvent
   end
 
   def to_s
-    'asdf'
+    raise NotImplementedError
   end
 end
