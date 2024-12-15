@@ -18,6 +18,7 @@ module Game
     def walkable?
       non_nil_metatile = @metatile_id != NIL_METATILE_ID
       no_collision = @collision == 0
+      # im unsure if we actually want this check
       # object_events = @events.select { |event| event.is_a?(EventReader::ObjectEventTemplate) }
 
       non_nil_metatile && no_collision # && object_events.empty?

@@ -76,42 +76,19 @@ module Game
       end
     end
 
-    ObjectEventTemplate = Struct.new(
-      :local_id, :graphics_id, :kind, :x, :y,
-      :elevation, :movement_type, :movement_range_x, :movement_range_y,
-      :trainer_type, :trainer_range_berry_tree_id, :script, :flag_id,
-      :target_local_id, :target_map_num, :target_map_group
-    )
+    # ObjectEventTemplate = Struct.new(
+    #   :local_id, :graphics_id, :kind, :x, :y,
+    #   :elevation, :movement_type, :movement_range_x, :movement_range_y,
+    #   :trainer_type, :trainer_range_berry_tree_id, :script, :flag_id,
+    #   :target_local_id, :target_map_num, :target_map_group
+    # )
 
-    WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group, :warp_type)
+    # WarpEvent = Struct.new(:x, :y, :elevation, :warp_id, :map_num, :map_group, :warp_type)
 
-    class CoordEvent
-      attr_accessor :x, :y, :elevation, :trigger, :index, :script
+    # CoordEvent = Struct.new(:x, :y, :elevation, :trigger, :index, :script) do
+    # end
 
-      def initialize(x, y, elevation, trigger, index, script)
-        @x = x
-        @y = y
-        @elevation = elevation
-        @trigger = trigger
-        @index = index
-        @script = script
-      end
-
-      def to_s
-        <<~STRING
-          ~~~
-          x: #{x},
-          y: #{y},
-          elevation: #{elevation},
-          trigger: #{trigger},
-          index: #{index},
-          script: #{script}
-          ~~~
-        STRING
-      end
-    end
-
-    BgEvent = Struct.new(:x, :y, :elevation, :kind, :hidden_item_or_script)
+    # BgEvent = Struct.new(:x, :y, :elevation, :kind, :hidden_item_or_script)
 
     def self.parse_map_events
       base_address = Game::MapReader.fetch_map_header[:events]
@@ -192,7 +169,7 @@ module Game
         flag_id = io.read(2).unpack1('s<')
         io.read(2) # final padding
 
-        ObjectEventTemplate.new(
+        ObjectEvent.new(
           local_id, graphics_id, kind, x, y,
           elevation, movement_type, movement_range_x, movement_range_y,
           trainer_type, trainer_range_berry_tree_id, script, flag_id,
