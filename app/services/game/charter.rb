@@ -48,6 +48,22 @@ module Game
 
       raise PathNotFoundError if path.nil?
 
+      # TODO(adenta) refactor this and the below cons into a unified method to do the dx dy logic
+      if path.length == 1
+        dx = destination_x - player_location[:x]
+        dy = destination_y - player_location[:y]
+
+        if dx == 1
+          Retroarch::KeyboardService.right
+        elsif dx == -1
+          Retroarch::KeyboardService.left
+        elsif dy == 1
+          Retroarch::KeyboardService.down
+        elsif dy == -1
+          Retroarch::KeyboardService.up
+        end
+      end
+
       path.each_cons(2) do |node, next_node|
         dx = next_node.x - node.x
         dy = next_node.y - node.y

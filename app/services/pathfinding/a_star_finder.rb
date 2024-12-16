@@ -34,24 +34,29 @@ module Pathfinding
           distance = @heuristic.call(
             (neighbor.x - end_node.x).abs, (neighbor.y - end_node.y).abs
           )
-
           if distance < min_distance
             closest_node = neighbor
             min_distance = distance
           end
 
-          open_set << neighbor unless visited[neighbor]
+          open_set << neighbor
         end
       end
 
       # Re-run pathfinding to the closest node
       path_to_closest = pathfinding_helper(start_node, closest_node, grid) || [start_node]
 
-      # Add one final step toward the end_node if possible
+      # Add one final step if end_node is adjacent
       final_step = grid.neighbors(closest_node).find do |neighbor|
         neighbor.x == end_node.x && neighbor.y == end_node.y
       end
-      path_to_closest << final_step if final_step
+      if final_step
+        path_to_closest << final_step
+      else
+        # If not directly adjacent, try a quick pathfinding attempt from closest_node to end_node
+        extra_path = pathfinding_helper(closest_node, end_node, grid)
+        path_to_closest.concat(extra_path[1..]) if extra_path && extra_path.size > 1
+      end
 
       path_to_closest
     end
@@ -77,19 +82,19 @@ module Pathfinding
         return reconstruct_path(came_from, current) if current == end_node
 
         open_set.delete(current)
-
         grid.neighbors(current).each do |neighbor|
           tentative_g_score = g_score[current] + d(current, neighbor)
           next if tentative_g_score >= g_score[neighbor]
 
           came_from[neighbor] = current
           g_score[neighbor] = tentative_g_score
-          f_score[neighbor] = g_score[neighbor] + @heuristic.call(
+          f_score[neighbor] = tentative_g_score + @heuristic.call(
             (neighbor.x - end_node.x).abs, (neighbor.y - end_node.y).abs
           )
           open_set << neighbor unless open_set.include?(neighbor)
         end
       end
+
       nil
     end
 
