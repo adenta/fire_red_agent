@@ -8,7 +8,7 @@ module Intelligence
         messages: [
           {
             role: 'system',
-            content: 'You are a video game photographer. You are tasked with reading the text from the screenshot. if no text is present, return an empty string.'
+            content: 'You are a video game photographer. You are tasked with reading the text from the screenshot. if no text is present, return an empty string. If the text is illegible, return an empty string. if the text is in a non english language, return an empty string'
           },
           {
             role: 'user',

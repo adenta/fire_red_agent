@@ -11,6 +11,7 @@ class CoordEvent
   end
 
   def to_s
-    Game::SymbolReader.read_symbol(script)[:name]
+    script_name = Game::SymbolReader.read_symbol(script)
+    script_name ? script_name[:name] : 'Unknown Script'
   end
 end

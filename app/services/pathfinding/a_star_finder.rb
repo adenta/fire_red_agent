@@ -45,7 +45,15 @@ module Pathfinding
       end
 
       # Re-run pathfinding to the closest node
-      pathfinding_helper(start_node, closest_node, grid) || [start_node]
+      path_to_closest = pathfinding_helper(start_node, closest_node, grid) || [start_node]
+
+      # Add one final step toward the end_node if possible
+      final_step = grid.neighbors(closest_node).find do |neighbor|
+        neighbor.x == end_node.x && neighbor.y == end_node.y
+      end
+      path_to_closest << final_step if final_step
+
+      path_to_closest
     end
 
     private
