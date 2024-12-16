@@ -3,6 +3,8 @@ module Intelligence
     def self.read_text
       client = SchemaClient.new
       response_format = TextReasoning.new
+      screenshot = Retroarch::ScreenshotReader.capture_screenshot
+
       response = client.parse(
         model: 'gpt-4o',
         messages: [
@@ -15,13 +17,15 @@ module Intelligence
             content: [
               { "type": 'image_url',
                 "image_url": {
-                  "url": Retroarch::ScreenshotReader.capture_screenshot
+                  "url": screenshot[:data_url]
                 } }
             ]
           }
         ],
         response_format: response_format
       )
+
+      File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
       response.parsed['text']
     end

@@ -15,7 +15,10 @@ module Retroarch
       screenshot_data = File.read(Rails.root.join(screenshot_name))
 
       # TODO(adenta) this can probably be compressed
-      "data:image/png;base64,#{Base64.strict_encode64(screenshot_data)}"
+      {
+        data_url: "data:image/png;base64,#{Base64.strict_encode64(screenshot_data)}",
+        file_path: Rails.root.join(screenshot_name)
+      }
     end
 
     private
