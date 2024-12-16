@@ -1,4 +1,4 @@
-class ObjectEvent
+class ObjectEventTemplate
   attr_accessor :local_id, :graphics_id, :kind, :x, :y,
                 :elevation, :movement_type, :movement_range_x, :movement_range_y,
                 :trainer_type, :trainer_range_berry_tree_id, :script, :flag_id,

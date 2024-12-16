@@ -20,6 +20,8 @@ module Intelligence
 
         You can only walk towards one of these given destinations, and nowhere else.
 
+        Don't be afraid to walk towards the same space an object is currently standing on, we won't let you bump into them.
+
       PROMPT
 
       client = SchemaClient.new
