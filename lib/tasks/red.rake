@@ -1,4 +1,14 @@
 namespace :red do
+  task loop: :environment do
+    start_time = Time.now
+    text = Intelligence::TextReader.read_text_with_gpt4
+    end_time = Time.now
+
+    elapsed_time = end_time - start_time
+    puts "Text read: #{text}"
+    puts "Time taken: #{elapsed_time} seconds"
+  end
+
   task first_loop: :environment do
     past_map_layouts = [Game::MapReader.fetch_map_header[:map_layout].to_s(16)]
     memory = []
