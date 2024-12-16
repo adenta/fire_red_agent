@@ -1,5 +1,5 @@
 namespace :red do
-  task loop: :environment do
+  task first_loop: :environment do
     past_map_layouts = [Game::MapReader.fetch_map_header[:map_layout].to_s(16)]
     memory = []
     loop do

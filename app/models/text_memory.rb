@@ -1,0 +1,2 @@
+class TextMemory < ApplicationRecord
+end

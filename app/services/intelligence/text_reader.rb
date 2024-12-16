@@ -1,6 +1,6 @@
 module Intelligence
   class TextReader
-    def self.read_text
+    def self.read_text_with_gpt4
       client = SchemaClient.new
       response_format = TextReasoning.new
       screenshot = Retroarch::ScreenshotReader.capture_screenshot
@@ -28,6 +28,13 @@ module Intelligence
       File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
       response.parsed['text']
+    end
+
+    def self.read_text_with_tesseract
+      screenshot = Retroarch::ScreenshotReader.capture_screenshot
+      text = RTesseract.new(screenshot[:file_path].to_s).to_s
+      File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
+      text.gsub(/\n/, ' ')
     end
   end
 end
