@@ -80,7 +80,7 @@ module Game
     end
 
     def self.fetch_map_name
-      'MAP_' + SymbolReader.read_symbol(fetch_map_header[:map_layout])[:name].gsub('_LAYOUT', '')
+      SymbolReader.read_symbol(fetch_map_header[:map_layout])[:name]
     end
 
     def self.fetch_map_dimensions

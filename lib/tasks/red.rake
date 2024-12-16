@@ -1,12 +1,12 @@
 namespace :red do
   task loop: :environment do
-    start_time = Time.now
-    text = Intelligence::TextReader.read_text_with_gpt4
-    end_time = Time.now
-
-    elapsed_time = end_time - start_time
-    puts "Text read: #{text}"
-    puts "Time taken: #{elapsed_time} seconds"
+    loop do
+      MapMemory.create!(name: Game::MapReader.fetch_map_name)
+      Intelligence::ConversationHandler.handle_conversation
+      path = Intelligence::LocomotionHandler.calculate_path
+      Game::Charter.chart_path(x: path[:x], y: path[:y])
+      Retroarch::KeyboardService.a
+    end
   end
 
   task first_loop: :environment do

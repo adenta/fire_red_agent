@@ -1,0 +1,2 @@
+class MapMemory < ApplicationRecord
+end
