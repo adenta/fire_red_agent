@@ -76,8 +76,8 @@ module Pathfinding
                     end_chr
                   elsif path&.include?(current)
                     path_chr
-                  elsif current&.events&.any?
-                    '!'
+                  # elsif current&.events&.any?
+                  #   '!'
                   elsif current&.walkable?
                     empty_chr
                   else

@@ -21,6 +21,8 @@ module Game
       # im unsure if we actually want this check
       object_events = @events.select { |event| event.is_a?(ObjectEvent) }
 
+      ap "object event found at #{@x}, #{@y}" if object_events.any?
+
       non_nil_metatile && no_collision && object_events.empty?
     end
   end
