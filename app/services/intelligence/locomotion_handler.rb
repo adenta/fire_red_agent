@@ -16,7 +16,15 @@ module Intelligence
         There are several destinations you can travel to:
         #{destinations}
 
-        Here is a log of your previous conversations so far: #{TextMemory.all.pluck(:body).join("\n")}
+        Here is a log of the previous places youve been and things you have interacted with:
+        ```
+         #{TravelMemory.all.to_json}
+        ```
+
+        Here is a log of your previous conversations so far:
+        ```
+        #{TextMemory.all.pluck(:body).join("\n")}
+        ```
 
         You can only walk towards one of these given destinations, and nowhere else.
 
@@ -39,6 +47,13 @@ module Intelligence
 
       x = response.parsed['x']
       y = response.parsed['y']
+      description = response.parsed['description']
+      x
+      ap response.parsed
+
+      TravelMemory.create!(x: x, y: y, script_name: description)
+
+      Game::Charter.chart_path(x: x, y: y)
 
       { x: x, y: y }
     end

@@ -1,0 +1,2 @@
+class TravelMemory < ApplicationRecord
+end

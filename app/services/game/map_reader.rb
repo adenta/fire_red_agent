@@ -68,7 +68,7 @@ module Game
         map_cell_grid[event.y][event.x].events << event
       end
 
-      map_events.object_events.each do |event|
+      map_events.object_event_templates.each do |event|
         map_cell_grid[event.y][event.x].events << event
       end
 
