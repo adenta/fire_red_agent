@@ -1,0 +1,60 @@
+module Sky
+  class KeyboardService
+    UP = :up
+    DOWN = :down
+    LEFT = :left
+    RIGHT = :right
+    A = :a
+    B = :b
+
+    KEY_CODES = {
+      up: 126,
+      down: 125,
+      left: 123,
+      right: 124,
+      a: 7, # 7 is the key code for 'x'
+      b: 6 # 6 is the key code for 'z'
+    }.freeze
+
+    APPLICATION_NAME = 'RetroArch'
+
+    def self.up
+      send_key_event(:up)
+    end
+
+    def self.down
+      send_key_event(:down)
+    end
+
+    def self.left
+      send_key_event(:left)
+    end
+
+    def self.right
+      send_key_event(:right)
+    end
+
+    def self.a
+      send_key_event(:a)
+    end
+
+    def self.b
+      send_key_event(:b)
+    end
+
+    def self.send_key_event(direction, duration = 0.01)
+      ap "sending button command #{direction}"
+    end
+
+    private
+
+    def self.activate_application
+    end
+
+    def self.key_down(key_code)
+    end
+
+    def self.key_up(key_code)
+    end
+  end
+end
