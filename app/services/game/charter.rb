@@ -46,7 +46,10 @@ module Game
       finder = Pathfinding::AStarFinder.new(Pathfinding::Heuristic.method(:manhattan))
       path = finder.find_path(start_node, end_node, grid)
 
-      raise PathNotFoundError if path.nil?
+      if path.nil?
+        Game::MemoryMaker.create_not_found_path_memory(destination_x, destination_y)
+        raise PathNotFoundError
+      end
 
       # TODO(adenta) refactor this and the below cons into a unified method to do the dx dy logic
       if path.length == 1

@@ -7,11 +7,13 @@ class SchemaClient
   end
 
   # Send a request to OpenAI API and parse the response
-  def parse(model:, messages:, response_format:)
+  def parse(model:, messages:, response_format:, frequency_penalty: 0, presence_penalty: 0)
     response = @client.chat(
       parameters: {
         model:,
         messages:,
+        frequency_penalty:,
+        presence_penalty:,
         response_format: {
           type: 'json_schema',
           json_schema: response_format.to_hash

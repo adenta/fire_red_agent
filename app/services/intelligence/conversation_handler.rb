@@ -45,12 +45,21 @@ module Intelligence
 
         text << transcript
 
-        File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
+        if transcript.present?
+          ap "found text on screen: #{transcript}"
+        else
+          ap 'no text found on screen'
+        end
+
+        # Not deleting because we are gitignoreing, imagine data might be useful later
+        # File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
         break if next_action == 'move_on'
 
         Retroarch::KeyboardService.a
       end
+
+      Game::MemoryMaker.create_screen_text_memory(text.join("\n")) unless text.compact.empty?
     end
   end
 end

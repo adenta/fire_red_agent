@@ -16,6 +16,7 @@ class MapEvents
 
   def unified_events
     object_event_templates_on_map = object_event_templates.select(&:on_map?)
+    ap object_event_templates.reject(&:on_map?)
     object_event_templates_on_map + warps + coord_events + bg_events
   end
 end

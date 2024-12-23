@@ -25,9 +25,28 @@ module Game
     end
 
     def self.create_chosen_location_memory(x, y, description, explanation)
+      # removing the explanation for now, as some of the explanations are halusinations
       memory_role = GameMemory::USER_ROLE
       body = <<~BODY
-        I am going to walk towards #{x}, #{y} (#{description}). I'm doing this because #{explanation}.
+        I am going to walk towards #{x}, #{y} (#{description}).
+      BODY
+
+      GameMemory.create!(memory_role: memory_role, body: body)
+    end
+
+    def self.create_screen_text_memory(text)
+      memory_role = GameMemory::ASSISTANT_ROLE
+      body = <<~BODY
+        The text on the screen reads as follows: #{text}
+      BODY
+
+      GameMemory.create!(memory_role: memory_role, body: body)
+    end
+
+    def self.create_not_found_path_memory(x, y)
+      memory_role = GameMemory::USER_ROLE
+      body = <<~BODY
+        I tried to find a path to #{x}, #{y}, but I couldn't find one. I'm going to try a different destination.
       BODY
 
       GameMemory.create!(memory_role: memory_role, body: body)
