@@ -10,24 +10,5 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_17_002536) do
-  create_table "map_memories", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "text_memories", force: :cascade do |t|
-    t.string "body", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "travel_memories", force: :cascade do |t|
-    t.integer "x", null: false
-    t.integer "y", null: false
-    t.string "script_name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+ActiveRecord::Schema[8.0].define(version: 2024_12_23_195309) do
 end
