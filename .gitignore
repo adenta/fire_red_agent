@@ -38,3 +38,6 @@
 
 # Ignore .DS_Store files in all directories
 .DS_Store
+
+# Ignore all PNG files in db/data/games
+/db/data/games/*.png

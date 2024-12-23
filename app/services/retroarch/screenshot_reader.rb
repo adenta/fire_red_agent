@@ -25,7 +25,7 @@ module Retroarch
 
     def self.most_recent_screenshot_name
       # Define the path to the screenshots directory
-      screenshots_dir = Pathname.new('tmp')
+      screenshots_dir = Rails.root.join('db', 'data', 'games')
 
       # Get all .png files in the directory
       png_files = screenshots_dir.glob('*.png')

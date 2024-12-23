@@ -45,6 +45,8 @@ module Intelligence
 
         text << transcript
 
+        ap screenshot[:file_path]
+
         File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
         break if next_action == 'move_on'
