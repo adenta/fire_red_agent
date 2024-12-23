@@ -1,6 +1,7 @@
 namespace :red do
   task loop: :environment do
     loop do
+      ap 'asdf'
       MapMemory.create!(name: Game::MapReader.fetch_map_name)
       Intelligence::ConversationHandler.handle_conversation
       path = Intelligence::LocomotionHandler.calculate_path
