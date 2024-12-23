@@ -12,25 +12,6 @@ class JsonGenerator < Rails::Generators::Base
     run 'bundle install'
   end
 
-  def create_initializer
-    initializer_path = 'config/initializers/generators.rb'
-    initializer_content = <<~RUBY
-      Rails.application.config.generators do |g|
-        g.assets false
-        # g.factory_bot true
-        g.helper false
-        g.orm :active_record, primary_key_type: :uuid
-        g.stylesheets false
-        # g.system_tests :rspec
-        g.template_engine nil
-        # g.test_framework :rspec
-        # g.fixture_replacement :factory_bot, suffix_factory: 'factory'
-      end
-    RUBY
-
-    create_file initializer_path, initializer_content
-  end
-
   def create_blueprint_initializer
     initializer_path = 'config/initializers/blueprints.rb'
     initializer_content = <<~RUBY

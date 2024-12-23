@@ -65,3 +65,7 @@ end
 
 gem 'dotenv'
 gem 'rtesseract'
+
+gem "blueprinter"
+
+gem "oj"
