@@ -5,7 +5,7 @@ namespace :red do
       Intelligence::ConversationHandler.handle_conversation
       path = Intelligence::LocomotionHandler.calculate_path
       Game::Charter.chart_path(x: path[:x], y: path[:y])
-      Retroarch::KeyboardService.a
+      Sky::KeyboardService.a
     end
   end
 
@@ -19,5 +19,16 @@ namespace :red do
 
     system(command)
     puts 'Game launched successfully'
+  end
+
+  task benchmark_memory: :environment do
+    V_MAP = 0x03005040
+    V_MAP_LENGTH = 12
+
+    G_MAP_HEADER = 0x02036dfc
+    G_MAP_HEADER_LENGTH = 0x1c
+
+    ap Sky::MemoryReader.read_bytes_packet(G_MAP_HEADER, G_MAP_HEADER_LENGTH)
+    ap Sky::MemoryReader.read_bytes_packet(G_MAP_HEADER, G_MAP_HEADER_LENGTH)
   end
 end

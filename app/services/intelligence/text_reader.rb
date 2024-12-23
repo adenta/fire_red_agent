@@ -3,7 +3,7 @@ module Intelligence
     def self.read_text_with_gpt4
       client = SchemaClient.new
       response_format = TextReasoning.new
-      screenshot = Retroarch::ScreenshotReader.capture_screenshot
+      screenshot = Sky::ScreenshotReader.capture_screenshot
 
       response = client.parse(
         model: 'gpt-4o',
@@ -31,7 +31,7 @@ module Intelligence
     end
 
     def self.read_text_with_tesseract
-      screenshot = Retroarch::ScreenshotReader.capture_screenshot
+      screenshot = Sky::ScreenshotReader.capture_screenshot
       text = RTesseract.new(screenshot[:file_path].to_s).to_s
       File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
       text.gsub(/\n/, ' ')

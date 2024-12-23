@@ -5,7 +5,7 @@ module Game
       rv = {}
       keys.each do |key|
         tileset_id = MapReader.fetch_map_layout[key]
-        memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_id, 0x18)
+        memory_data = Sky::MemoryReader.read_binary_bytes(tileset_id, 0x18)
 
         is_compressed = memory_data.getbyte(0) != 0
         is_secondary = memory_data.getbyte(1) != 0
@@ -30,15 +30,15 @@ module Game
     end
 
     def self.fetch_metatile_behaviors
-      primary_memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_metas[:primary_tileset][:metatile_attributes],
-                                                                      MAX_METATILE_ATTRIBUTE_LENGTH)
+      primary_memory_data = Sky::MemoryReader.read_binary_bytes(tileset_metas[:primary_tileset][:metatile_attributes],
+                                                                MAX_METATILE_ATTRIBUTE_LENGTH)
 
       primary_behaviors = primary_memory_data.unpack('L<*').map do |raw|
         (raw & 0x1FF).to_s(16)
       end
 
-      secondary_memory_data = Retroarch::MemoryReader.read_binary_bytes(tileset_metas[:secondary_tileset][:metatile_attributes],
-                                                                        MAX_METATILE_ATTRIBUTE_LENGTH)
+      secondary_memory_data = Sky::MemoryReader.read_binary_bytes(tileset_metas[:secondary_tileset][:metatile_attributes],
+                                                                  MAX_METATILE_ATTRIBUTE_LENGTH)
 
       secondary_behaviors = secondary_memory_data.unpack('L<*').map do |raw|
         (raw & 0x1FF).to_s(16)

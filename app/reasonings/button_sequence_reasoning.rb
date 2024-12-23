@@ -2,12 +2,12 @@ class ButtonSequenceReasoning < BaseSchema
   def initialize
     super do
       enum :button, [
-        Retroarch::KeyboardService::UP,
-        Retroarch::KeyboardService::DOWN,
-        Retroarch::KeyboardService::LEFT,
-        Retroarch::KeyboardService::RIGHT,
-        Retroarch::KeyboardService::A,
-        Retroarch::KeyboardService::B
+        Sky::KeyboardService::UP,
+        Sky::KeyboardService::DOWN,
+        Sky::KeyboardService::LEFT,
+        Sky::KeyboardService::RIGHT,
+        Sky::KeyboardService::A,
+        Sky::KeyboardService::B
       ]
     end
   end

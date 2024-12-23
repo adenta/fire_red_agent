@@ -7,7 +7,7 @@ module Intelligence
 
       loop do
         sleep 1
-        screenshot = Retroarch::ScreenshotReader.capture_screenshot
+        screenshot = Sky::ScreenshotReader.capture_screenshot
         prompt = <<~PROMPT
           You just started interacting with an object in pokemon. We need a transcript of the conversation.
 
@@ -49,7 +49,7 @@ module Intelligence
 
         break if next_action == 'move_on'
 
-        Retroarch::KeyboardService.a
+        Sky::KeyboardService.a
       end
 
       ap 'finished'

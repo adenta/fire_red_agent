@@ -54,13 +54,13 @@ module Game
         dy = destination_y - player_location[:y]
 
         if dx == 1
-          Retroarch::KeyboardService.right
+          Sky::KeyboardService.right
         elsif dx == -1
-          Retroarch::KeyboardService.left
+          Sky::KeyboardService.left
         elsif dy == 1
-          Retroarch::KeyboardService.down
+          Sky::KeyboardService.down
         elsif dy == -1
-          Retroarch::KeyboardService.up
+          Sky::KeyboardService.up
         end
       end
 
@@ -69,13 +69,13 @@ module Game
         dy = next_node.y - node.y
 
         if dx == 1
-          Retroarch::KeyboardService.right
+          Sky::KeyboardService.right
         elsif dx == -1
-          Retroarch::KeyboardService.left
+          Sky::KeyboardService.left
         elsif dy == 1
-          Retroarch::KeyboardService.down
+          Sky::KeyboardService.down
         elsif dy == -1
-          Retroarch::KeyboardService.up
+          Sky::KeyboardService.up
         end
       end
 
@@ -83,33 +83,33 @@ module Game
 
       case last_metatile_behavior
       when Game::MetatileBehaviors::MB_DOWN_LEFT_STAIR_WARP
-        Retroarch::KeyboardService.left
-        Retroarch::KeyboardService.left
-        Retroarch::KeyboardService.left
+        Sky::KeyboardService.left
+        Sky::KeyboardService.left
+        Sky::KeyboardService.left
 
       when Game::MetatileBehaviors::MB_DOWN_RIGHT_STAIR_WARP
-        Retroarch::KeyboardService.right
-        Retroarch::KeyboardService.right
-        Retroarch::KeyboardService.right
+        Sky::KeyboardService.right
+        Sky::KeyboardService.right
+        Sky::KeyboardService.right
 
       when Game::MetatileBehaviors::MB_UP_LEFT_STAIR_WARP
-        Retroarch::KeyboardService.left
-        Retroarch::KeyboardService.left
-        Retroarch::KeyboardService.left
+        Sky::KeyboardService.left
+        Sky::KeyboardService.left
+        Sky::KeyboardService.left
 
       when Game::MetatileBehaviors::MB_UP_RIGHT_STAIR_WARP
-        Retroarch::KeyboardService.right
-        Retroarch::KeyboardService.right
-        Retroarch::KeyboardService.right
+        Sky::KeyboardService.right
+        Sky::KeyboardService.right
+        Sky::KeyboardService.right
 
       when Game::MetatileBehaviors::MB_EAST_ARROW_WARP
-        Retroarch::KeyboardService.right
+        Sky::KeyboardService.right
       when Game::MetatileBehaviors::MB_WEST_ARROW_WARP
-        Retroarch::KeyboardService.left
+        Sky::KeyboardService.left
       when Game::MetatileBehaviors::MB_NORTH_ARROW_WARP
-        Retroarch::KeyboardService.up
+        Sky::KeyboardService.up
       when Game::MetatileBehaviors::MB_SOUTH_ARROW_WARP
-        Retroarch::KeyboardService.down
+        Sky::KeyboardService.down
       end
     end
   end

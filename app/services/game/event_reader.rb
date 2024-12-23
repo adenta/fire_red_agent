@@ -213,7 +213,7 @@ module Game
     end
 
     def self.read_bytes(address, length)
-      memory_data = Retroarch::MemoryReader.read_bytes(address, length)
+      memory_data = Sky::MemoryReader.read_bytes(address, length)
       memory_data.map { |byte| byte.to_i(16).chr }.join
     end
 

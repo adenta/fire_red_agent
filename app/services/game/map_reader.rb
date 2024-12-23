@@ -20,7 +20,7 @@ module Game
 
   class MapReader
     def self.fetch_map_data
-      memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
+      memory_data = Sky::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
 
       data = []
       (0...(memory_data.bytesize / 2)).each do |i|
@@ -84,7 +84,7 @@ module Game
     end
 
     def self.fetch_map_dimensions
-      memory_data = Retroarch::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
+      memory_data = Sky::MemoryReader.read_bytes(V_MAP, V_MAP_LENGTH)
 
       map_width, map_height, map_location = memory_data.each_slice(4).to_a
 
@@ -97,14 +97,14 @@ module Game
     end
 
     def self.fetch_player_location
-      memory_data = Retroarch::MemoryReader.read_bytes(PLAYER_LOCATION, 0x4)
+      memory_data = Sky::MemoryReader.read_bytes(PLAYER_LOCATION, 0x4)
 
       x, y = memory_data.each_slice(2).to_a.map(&:reverse).map(&:join).map { |x| x.to_i(16) }
       { x: x, y: y }
     end
 
     def self.fetch_map_header
-      memory_data = Retroarch::MemoryReader.read_bytes(G_MAP_HEADER, G_MAP_HEADER_LENGTH)
+      memory_data = Sky::MemoryReader.read_bytes(G_MAP_HEADER, G_MAP_HEADER_LENGTH)
 
       binary_data = memory_data.map { |byte| byte.to_i(16).chr }.join
 
@@ -130,7 +130,7 @@ module Game
     end
 
     def self.fetch_map_layout
-      memory_data = Retroarch::MemoryReader.read_binary_bytes(fetch_map_header[:map_layout], 0x1A)
+      memory_data = Sky::MemoryReader.read_binary_bytes(fetch_map_header[:map_layout], 0x1A)
       layout_data = memory_data.unpack('l<l<l<l<l<l<CC')
       {
         width: layout_data[0],
