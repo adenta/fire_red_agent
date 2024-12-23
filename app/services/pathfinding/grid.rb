@@ -76,8 +76,8 @@ module Pathfinding
                     end_chr
                   elsif path&.include?(current)
                     path_chr
-                  # elsif current&.events&.any?
-                  #   '!'
+                  elsif current&.events&.any?
+                    '!'
                   elsif current&.walkable?
                     empty_chr
                   else
@@ -108,32 +108,32 @@ module Pathfinding
     #
     # Get all neighbors of a node.
     #
-    def neighbors(node)
+    def neighbors(node, end_node)
       x = node.x
       y = node.y
       neighbors = []
       s0 = d0 = s1 = d1 = s2 = d2 = s3 = d3 = false
 
       # ↑
-      if walkable?(x, y - 1)
+      if walkable?(x, y - 1) || node(x, y - 1) == end_node
         neighbors << node(x, y - 1)
         s0 = true
       end
 
       # →
-      if walkable?(x + 1, y)
+      if walkable?(x + 1, y) || node(x + 1, y) == end_node
         neighbors << node(x + 1, y)
         s1 = true
       end
 
       # ↓
-      if walkable?(x, y + 1)
+      if walkable?(x, y + 1) || node(x, y + 1) == end_node
         neighbors << node(x, y + 1)
         s2 = true
       end
 
       # ←
-      if walkable?(x - 1, y)
+      if walkable?(x - 1, y) || node(x - 1, y) == end_node
         neighbors << node(x - 1, y)
         s3 = true
       end

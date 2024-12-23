@@ -48,7 +48,7 @@ module Pathfinding
 
         current = open_set.delete_at(open_set.index(current))
 
-        grid.neighbors(current).each do |neighbor|
+        grid.neighbors(current, end_node).each do |neighbor|
           tentative_g_score = g_score[current] + d(current, neighbor)
           next if tentative_g_score >= g_score[neighbor]
 

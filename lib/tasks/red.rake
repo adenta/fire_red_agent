@@ -1,9 +1,12 @@
 namespace :red do
   task loop: :environment do
     loop do
-      Intelligence::ConversationHandler.handle_conversation
-      path = Intelligence::LocomotionHandler.calculate_path
-      Game::Charter.chart_path(x: path[:x], y: path[:y])
+      # Intelligence::ConversationHandler.handle_conversation
+      Game::MemoryMaker.create_location_memory
+      Game::MemoryMaker.create_destination_list_memory
+      x, y, description, explanation = Intelligence::LocomotionHandler.calculate_path
+      Game::MemoryMaker.create_chosen_location_memory(x, y, description, explanation)
+      Game::Charter.chart_path(x:, y:)
       Retroarch::KeyboardService.a
     end
   end

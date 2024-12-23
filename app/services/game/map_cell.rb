@@ -19,9 +19,7 @@ module Game
       non_nil_metatile = @metatile_id != NIL_METATILE_ID
       no_collision = @collision == 0
       # im unsure if we actually want this check
-      object_events = @events.select { |event| event.is_a?(ObjectEvent) }
-
-      ap "object event found at #{@x}, #{@y}" if object_events.any?
+      object_events = @events.select { |event| event.is_a?(ObjectEventTemplate) }
 
       non_nil_metatile && no_collision && object_events.empty?
     end

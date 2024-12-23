@@ -1,18 +1,8 @@
 module Intelligence
   class LocomotionHandler
     def self.calculate_path
-      destinations = Game::Charter.list_destinations.to_json
-      player_location = Game::MapReader.fetch_player_location.to_json
-      current_map_layout = Game::MapReader.fetch_map_name
-
       prompt = <<~PROMPT
-        You are located on a grid at position #{player_location}.
-
-        There are several destinations you can travel to:
-        #{destinations}
-
-
-        You can only walk towards one of these given destinations, and nowhere else.
+        You are a pokemon master, trying to determine where to go on the map next.
       PROMPT
 
       client = SchemaClient.new
@@ -20,6 +10,7 @@ module Intelligence
       response = client.parse(
         model: 'gpt-4o',
         messages: [
+          *OpenaiPromptBlueprint.render_as_hash(GameMemory.all),
           {
             role: 'system',
             content: prompt
@@ -31,10 +22,9 @@ module Intelligence
       x = response.parsed['x']
       y = response.parsed['y']
       description = response.parsed['description']
+      explanation = response.parsed['explanation']
 
-      Game::Charter.chart_path(x: x, y: y)
-
-      { x: x, y: y }
+      [x, y, description, explanation]
     end
   end
 end
