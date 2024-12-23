@@ -45,9 +45,6 @@ module Intelligence
 
         text << transcript
 
-        raise NotImplementedError
-        'The screenshots need to be deleted or something'
-
         File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
         break if next_action == 'move_on'

@@ -17,7 +17,7 @@ module Retroarch
       # TODO(adenta) this can probably be compressed
       {
         data_url: "data:image/png;base64,#{Base64.strict_encode64(screenshot_data)}",
-        file_path: Rails.root.join(screenshot_name)
+        file_path: Rails.root.join(screenshot_name).to_s
       }
     end
 
