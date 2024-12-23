@@ -51,9 +51,6 @@ module Intelligence
 
         Retroarch::KeyboardService.a
       end
-
-      ap 'finished'
-      TextMemory.create!(body: text.join("\n"))
     end
   end
 end
