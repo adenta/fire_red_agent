@@ -75,6 +75,8 @@ module Game
       coord_events = parse_coord_events(coord_events_ptr, coord_event_count)
       bg_events = parse_bg_events(bg_events_ptr, bg_event_count)
 
+      new_warps = fetch_new_warp_coords
+
       MapEvents.new(
         object_event_count,
         warp_count,
@@ -85,6 +87,76 @@ module Game
         coord_events,
         bg_events
       )
+    end
+
+    def self.fetch_new_warp_coords
+      ap 'asdf'
+      connections = Game::Connections.fetch_map_connections
+
+      connections.map do |connection|
+        map_group, map_num = MapGroup::REVERSE_MAP_GROUP[connection[:map].to_sym]
+        x, y = case connection[:direction]
+               when 'up'
+                 fetch_north_warp_coords
+               when 'down'
+                 fetch_south_warp_coords
+               when 'left'
+                 fetch_west_warp_coords
+               when 'right'
+                 fetch_east_warp_coords
+               end
+        WarpEvent.new(x, y, 0, 0, map_num, map_group, 'door')
+      end
+    end
+
+    def self.fetch_north_warp_coords
+      first_row = Game::MapReader.fetch_map_cells.first
+      first_row.each_with_index do |cell, index|
+        next unless cell.metatile_id != 1023
+
+        x = index
+        y = 0
+        return [x, y]
+      end
+
+      nil
+    end
+
+    def self.fetch_south_warp_coords
+      map_cells = Game::MapReader.fetch_map_cells
+      last_row = map_cells.last
+      last_row.each_with_index do |cell, index|
+        next unless cell.metatile_id != 1023
+
+        x = index
+        y = map_cells.length - 1
+        return [x, y]
+      end
+
+      nil
+    end
+
+    def self.fetch_west_warp_coords
+      map_cells = Game::MapReader.fetch_map_cells
+      (0...map_cells.size).each do |y|
+        cell = map_cells[y].first
+        next if cell.metatile_id == 1023
+
+        return [x, y]
+      end
+      nil
+    end
+
+    def self.fetch_east_warp_coords
+      map_cells = Game::MapReader.fetch_map_cells
+      last_col = map_cells.first.size - 1
+      (0...map_cells.size).each do |y|
+        cell = map_cells[y][last_col]
+        next if cell.metatile_id == 1023
+
+        return [x, y]
+      end
+      nil
     end
 
     def self.parse_object_events(address, count)

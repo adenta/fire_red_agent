@@ -310,8 +310,7 @@ module Game
     def self.fetch_map_connections
       layout_name = Game::MapReader.fetch_map_name
       map_name = to_map_name(layout_name).to_sym
-      ap @data.keys
-      @data[map_name]
+      @data[map_name][:connections]
     end
   end
 end
