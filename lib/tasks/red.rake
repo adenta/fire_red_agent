@@ -48,4 +48,17 @@ namespace :red do
       Retroarch::KeyboardService.a
     end
   end
+
+  task connection_map: :environment do
+    connections = []
+    path = '/Users/andrew/archived-applications/pokefirered/data/maps'
+    map_files = Dir.glob(File.join(path, '**', 'map.json'))
+
+    map_files.each do |file|
+      map_data = JSON.parse(File.read(file))
+      connections << { name: map_data['id'], layout: map_data['layout'] } if map_data['connections']
+    end
+
+    ap connections
+  end
 end
