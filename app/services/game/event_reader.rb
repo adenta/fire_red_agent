@@ -75,8 +75,6 @@ module Game
       coord_events = parse_coord_events(coord_events_ptr, coord_event_count)
       bg_events = parse_bg_events(bg_events_ptr, bg_event_count)
 
-      new_warps = fetch_new_warp_coords
-
       MapEvents.new(
         object_event_count,
         warp_count,
@@ -89,32 +87,32 @@ module Game
       )
     end
 
-    def self.fetch_new_warp_coords
-      ap 'asdf'
+    def self.fetch_map_connection_warp_coords
       connections = Game::Connections.fetch_map_connections
+      map_cells = Game::MapReader.fetch_map_cells
 
       connections.map do |connection|
         map_group, map_num = MapGroup::REVERSE_MAP_GROUP[connection[:map].to_sym]
         x, y = case connection[:direction]
                when 'up'
-                 fetch_north_warp_coords
+                 fetch_north_warp_coords(map_cells)
                when 'down'
-                 fetch_south_warp_coords
+                 fetch_south_warp_coords(map_cells)
                when 'left'
-                 fetch_west_warp_coords
+                 fetch_west_warp_coords(map_cells)
                when 'right'
-                 fetch_east_warp_coords
+                 fetch_east_warp_coords(map_cells)
                end
         WarpEvent.new(x, y, 0, 0, map_num, map_group, 'door')
       end
     end
 
-    def self.fetch_north_warp_coords
-      first_row = Game::MapReader.fetch_map_cells.first
+    def self.fetch_north_warp_coords(map_cells)
+      first_row = map_cells.first
       first_row.each_with_index do |cell, index|
         next unless cell.metatile_id != 1023
 
-        x = index
+        x = index + 2
         y = 0
         return [x, y]
       end
@@ -122,8 +120,8 @@ module Game
       nil
     end
 
-    def self.fetch_south_warp_coords
-      map_cells = Game::MapReader.fetch_map_cells
+    def self.fetch_south_warp_coords(map_cells)
+      raise NotImplementedError
       last_row = map_cells.last
       last_row.each_with_index do |cell, index|
         next unless cell.metatile_id != 1023
@@ -136,8 +134,8 @@ module Game
       nil
     end
 
-    def self.fetch_west_warp_coords
-      map_cells = Game::MapReader.fetch_map_cells
+    def self.fetch_west_warp_coords(map_cells)
+      raise NotImplementedError
       (0...map_cells.size).each do |y|
         cell = map_cells[y].first
         next if cell.metatile_id == 1023
@@ -147,8 +145,8 @@ module Game
       nil
     end
 
-    def self.fetch_east_warp_coords
-      map_cells = Game::MapReader.fetch_map_cells
+    def self.fetch_east_warp_coords(map_cells)
+      raise NotImplementedError
       last_col = map_cells.first.size - 1
       (0...map_cells.size).each do |y|
         cell = map_cells[y][last_col]

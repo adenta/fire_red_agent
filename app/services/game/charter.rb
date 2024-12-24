@@ -11,8 +11,9 @@ module Game
     def self.list_destinations
       map_events = Game::EventReader.parse_map_events
       map_cells = Game::MapReader.fetch_map_cells
+      additional_warps = Game::EventReader.fetch_map_connection_warp_coords
 
-      events = map_events.unified_events
+      events = [*map_events.unified_events, *additional_warps]
 
       events.map do |event|
         {
