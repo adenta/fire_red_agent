@@ -18,10 +18,22 @@ namespace :red do
     end
   end
 
-  task launch_game: :environment do
+  task launch_game_osx: :environment do
     command = [
       '/Applications/RetroArch.app/Contents/MacOS/RetroArch',
       '-L "/Users/andrew/Library/Application Support/RetroArch/cores/mgba_libretro.dylib"',
+      Rails.root.join('db', 'data', 'games', 'firered.gba').to_s,
+      "--appendconfig=#{Rails.root.join('db', 'data', 'retroarch_config', 'live-savestate.cfg')}"
+    ].join(' ')
+
+    system(command)
+    puts 'Game launched successfully'
+  end
+
+  task launch_game_linux: :environment do
+    command = [
+      'retroarch',
+      # '-L "/home/andrew/.config/retroarch/cores/mgba_libretro.so"',
       Rails.root.join('db', 'data', 'games', 'firered.gba').to_s,
       "--appendconfig=#{Rails.root.join('db', 'data', 'retroarch_config', 'live-savestate.cfg')}"
     ].join(' ')
