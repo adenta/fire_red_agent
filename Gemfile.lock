@@ -202,7 +202,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.8-x86_64-linux)
       racc (~> 1.4)
-    oj (3.16.7)
+    oj (3.16.8)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     ostruct (0.6.1)
