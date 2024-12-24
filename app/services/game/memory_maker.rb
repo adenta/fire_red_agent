@@ -2,7 +2,7 @@ module Game
   class MemoryMaker
     def self.create_location_memory
       player_location = Game::MapReader.fetch_player_location
-      memory_role = GameMemory::ASSISTANT_ROLE
+      memory_role = GameMemory::SYSTEM_ROLE
       body = <<~BODY
         You are located on a grid at position #{player_location} on map #{Game::MapReader.fetch_map_name}.
       BODY
@@ -13,7 +13,7 @@ module Game
     def self.create_destination_list_memory
       destinations = Game::Charter.list_destinations.to_json
 
-      memory_role = GameMemory::ASSISTANT_ROLE
+      memory_role = GameMemory::SYSTEM_ROLE
       body = <<~BODY
         You can travel to one of the following destinations:
         #{destinations}
@@ -35,7 +35,7 @@ module Game
     end
 
     def self.create_screen_text_memory(text)
-      memory_role = GameMemory::ASSISTANT_ROLE
+      memory_role = GameMemory::SYSTEM_ROLE
       body = <<~BODY
         The text on the screen reads as follows: #{text}
       BODY

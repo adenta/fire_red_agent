@@ -1,8 +1,7 @@
 namespace :red do
   task loop: :environment do
-    # raise NotImplementedError
-    # # 1. debug by just running the prompt multiple times with reload
-    # # 2. try to cut down on what we are saving to the memories
+    GameMemory.destroy_all
+
     loop do
       Intelligence::ConversationHandler.handle_conversation
       Game::MemoryMaker.create_location_memory
@@ -29,5 +28,24 @@ namespace :red do
 
     system(command)
     puts 'Game launched successfully'
+  end
+
+  task single_action: :environment do
+    GameMemory.destroy_all!
+
+    loop do
+      # Intelligence::ConversationHandler.handle_conversation
+      Game::MemoryMaker.create_location_memory
+      Game::MemoryMaker.create_destination_list_memory
+      x, y, description, explanation = Intelligence::LocomotionHandler.calculate_path
+      Game::MemoryMaker.create_chosen_location_memory(x, y, description, explanation)
+      begin
+        Game::Charter.chart_path(x:, y:)
+      rescue Game::PathNotFoundError
+        ap 'Path not found error, continuing'
+        next
+      end
+      Retroarch::KeyboardService.a
+    end
   end
 end

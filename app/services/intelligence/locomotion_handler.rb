@@ -7,6 +7,8 @@ module Intelligence
         appropriate metatile_attribute. Whenever you enter a new room, be sure to talk to everyone first.#{' '}
         You can't always interact with everything just yet. For example, if you have previously interacted with a pokeball
         and nothing happened, you probably need to do something else before you can interact with it again.
+
+        You can never, EVER repeat the same action that you just took. In general, try not to repeat actions.
       PROMPT
 
       client = SchemaClient.new
