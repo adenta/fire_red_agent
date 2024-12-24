@@ -110,7 +110,7 @@ module Game
     def self.fetch_north_warp_coords(map_cells)
       first_row = map_cells.first
       first_row.each_with_index do |cell, index|
-        next unless cell.metatile_id != 1023
+        next unless cell.walkable?
 
         x = index + 2
         y = 0
@@ -121,10 +121,9 @@ module Game
     end
 
     def self.fetch_south_warp_coords(map_cells)
-      raise NotImplementedError
       last_row = map_cells.last
       last_row.each_with_index do |cell, index|
-        next unless cell.metatile_id != 1023
+        next unless cell.walkable?
 
         x = index
         y = map_cells.length - 1

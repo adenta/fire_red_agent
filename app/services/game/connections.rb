@@ -310,6 +310,8 @@ module Game
     def self.fetch_map_connections
       layout_name = Game::MapReader.fetch_map_name
       map_name = to_map_name(layout_name).to_sym
+      return [] if @data[map_name].nil? || @data[map_name][:connections].nil?
+
       @data[map_name][:connections]
     end
   end
