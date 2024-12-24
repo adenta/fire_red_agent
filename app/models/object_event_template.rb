@@ -36,6 +36,22 @@ class ObjectEventTemplate
     nil
   end
 
+  def x
+    if object_event.present?
+      object_event.current_coords.first
+    else
+      @x
+    end
+  end
+
+  def y
+    if object_event.present?
+      object_event.current_coords.second
+    else
+      @y
+    end
+  end
+
   def on_map?
     object_event.present?
   end
