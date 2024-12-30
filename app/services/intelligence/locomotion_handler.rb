@@ -16,7 +16,7 @@ module Intelligence
       response = client.parse(
         model: 'gpt-4o',
         messages: [
-          *OpenaiPromptBlueprint.render_as_hash(GameMemory.all),
+          *OpenaiPromptBlueprint.render_as_hash(GameMemory.last(250)),
           {
             role: 'system',
             content: prompt

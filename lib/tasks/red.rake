@@ -1,7 +1,5 @@
 namespace :red do
   task loop: :environment do
-    GameMemory.destroy_all
-
     loop do
       Intelligence::ConversationHandler.handle_conversation
       Game::MemoryMaker.create_location_memory
@@ -31,8 +29,6 @@ namespace :red do
   end
 
   task single_action: :environment do
-    GameMemory.destroy_all!
-
     loop do
       # Intelligence::ConversationHandler.handle_conversation
       Game::MemoryMaker.create_location_memory

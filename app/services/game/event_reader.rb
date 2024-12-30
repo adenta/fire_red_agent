@@ -91,69 +91,33 @@ module Game
       connections = Game::Connections.fetch_map_connections
       map_cells = Game::MapReader.fetch_map_cells
 
-      connections.map do |connection|
+      new_warps = []
+
+      connections.each do |connection|
         map_group, map_num = MapGroup::REVERSE_MAP_GROUP[connection[:map].to_sym]
-        x, y = case connection[:direction]
-               when 'up'
-                 fetch_north_warp_coords(map_cells)
-               when 'down'
-                 fetch_south_warp_coords(map_cells)
-               when 'left'
-                 fetch_west_warp_coords(map_cells)
-               when 'right'
-                 fetch_east_warp_coords(map_cells)
-               end
-        WarpEvent.new(x, y, 0, 0, map_num, map_group, 'door')
-      end
-    end
-
-    def self.fetch_north_warp_coords(map_cells)
-      first_row = map_cells.first
-      first_row.each_with_index do |cell, index|
-        next unless cell.walkable?
-
-        x = index + 2
-        y = 0
-        return [x, y]
+        case connection[:direction]
+        when 'up'
+          map_cells.first.each_with_index do |cell, i|
+            new_warps << WarpEvent.new(i, 0, 0, 0, map_num, map_group, 'door') if cell.walkable?
+          end
+        when 'down'
+          row_index = map_cells.size - 1
+          map_cells.last.each_with_index do |cell, col_index|
+            new_warps << WarpEvent.new(col_index, row_index, 0, 0, map_num, map_group, 'door') if cell.walkable?
+          end
+        when 'left'
+          map_cells.each_with_index do |row, i|
+            new_warps << WarpEvent.new(0, i, 0, 0, map_num, map_group, 'door') if row.first.walkable?
+          end
+        when 'right'
+          length = map_cells.first.length
+          map_cells.each_with_index do |row, i|
+            new_warps << WarpEvent.new(length - 1, i, 0, 0, map_num, map_group, 'door') if row.last.walkable?
+          end
+        end
       end
 
-      nil
-    end
-
-    def self.fetch_south_warp_coords(map_cells)
-      last_row = map_cells.last
-      last_row.each_with_index do |cell, index|
-        next unless cell.walkable?
-
-        x = index
-        y = map_cells.length - 1
-        return [x, y]
-      end
-
-      nil
-    end
-
-    def self.fetch_west_warp_coords(map_cells)
-      raise NotImplementedError
-      (0...map_cells.size).each do |y|
-        cell = map_cells[y].first
-        next if cell.metatile_id == 1023
-
-        return [x, y]
-      end
-      nil
-    end
-
-    def self.fetch_east_warp_coords(map_cells)
-      raise NotImplementedError
-      last_col = map_cells.first.size - 1
-      (0...map_cells.size).each do |y|
-        cell = map_cells[y][last_col]
-        next if cell.metatile_id == 1023
-
-        return [x, y]
-      end
-      nil
+      new_warps
     end
 
     def self.parse_object_events(address, count)

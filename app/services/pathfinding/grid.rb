@@ -32,6 +32,9 @@ module Pathfinding
     #
     def node(x, y)
       @nodes[y][x]
+    rescue NoMethodError
+      ap "NoMethodError: x: #{x}, y: #{y}"
+      nil
     end
 
     #
