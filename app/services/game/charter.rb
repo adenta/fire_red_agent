@@ -13,13 +13,13 @@ module Game
       map_cells = Game::MapReader.fetch_map_cells
       additional_warps = Game::EventReader.fetch_map_connection_warp_coords
 
-      filtered_additional_warps = additional_warps.select do |warp|
+      events = [*map_events.unified_events, *additional_warps]
+
+      filtered_events = events.select do |warp|
         map_cells[warp.y][warp.x].walkable?
       end
 
-      events = [*map_events.unified_events, *filtered_additional_warps]
-
-      events.map do |event|
+      filtered_events.map do |event|
         {
           x: event.x,
           y: event.y,

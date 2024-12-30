@@ -21,7 +21,16 @@ module Game
       # im unsure if we actually want this check
       object_events = @events.select { |event| event.is_a?(ObjectEventTemplate) }
 
-      non_nil_metatile && no_collision && object_events.empty?
+      warp_events = @events.select { |event| event.is_a?(WarpEvent) }
+
+      warps_present = warp_events.any?
+
+      normal_metatile_behavior = @metatile_behavior == Game::MetatileBehaviors::MB_NORMAL
+
+      # if the metatile is normal, and a warp cell is present, it probably isnt a door
+      normal_metatile_and_warp = warps_present && normal_metatile_behavior
+
+      non_nil_metatile && no_collision && object_events.empty? && !normal_metatile_and_warp
     end
   end
 end

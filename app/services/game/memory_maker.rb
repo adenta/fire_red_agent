@@ -35,6 +35,8 @@ module Game
     end
 
     def self.create_screen_text_memory(text)
+      return if text.blank?
+
       memory_role = GameMemory::SYSTEM_ROLE
       body = <<~BODY
         The text on the screen reads as follows: #{text}

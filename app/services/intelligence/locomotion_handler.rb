@@ -1,6 +1,7 @@
 module Intelligence
   class LocomotionHandler
     def self.calculate_path
+      journal_entry = Intelligence::TextSummaryHandler.summerize_text
       prompt = <<~PROMPT
         You are a pokemon master, trying to determine where to go on the map next. If it appears you tried to#{' '}
         go to a warp and nothing happens, consider trying a different warp. Many of the warps are labeled with an
@@ -17,6 +18,10 @@ module Intelligence
         model: 'gpt-4o',
         messages: [
           *OpenaiPromptBlueprint.render_as_hash(GameMemory.last(250)),
+          {
+            role: 'user',
+            content: "Dear Journal, #{journal_entry}"
+          },
           {
             role: 'system',
             content: prompt
