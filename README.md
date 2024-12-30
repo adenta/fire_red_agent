@@ -24,3 +24,10 @@ Pokémon stream next steps:
 - 3. Figure out why mom wasn’t showing up in the map preview. Figure out why mom was considered walkable
 - 1. Figure out how to get the chat memory state to persist. Use system and user prompts, and render them in the loop, removing older messages as needed
 - 6. Build a map of how all the locations connect to one another (pallet town leads to route 1 on the north, and route 38 on the south. Consider putting fake warps to guide the player)
+
+DEC30
+
+- have the pathfinding look for any available warp to the next map, not just the leftmost walkable cell
+- get retroarch controller support
+- set up a battle handler
+- get things working on linux

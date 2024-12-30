@@ -18,6 +18,8 @@ module Game
 
   MAX_METATILE_ATTRIBUTE_LENGTH = 0xa00
 
+  G_MAIN = 0x030030f0
+
   class MapReader
     def self.fetch_map_data
       memory_data = Retroarch::MemoryReader.read_binary_bytes(G_BACKUP_MAP_DATA, G_BACKUP_MAP_DATA_LENGTH)
@@ -101,6 +103,16 @@ module Game
 
       x, y = memory_data.each_slice(2).to_a.map(&:reverse).map(&:join).map { |x| x.to_i(16) }
       { x: x, y: y }
+    end
+
+    # this is part of a larger struct
+    # https://github.com/pret/pokefirered/blob/2a3e92e10f8353e167874d1d2f6b311560a2a80d/include/main.h#L11C1-L45C3
+    # but parsing all of it was hard, grabbing the last byte is easy
+    def self.fetch_in_battle
+      # Read the single byte at offset 0x439
+      last_byte = Retroarch::MemoryReader.read_binary_bytes(G_MAIN + 0x439, 1).unpack1('C')
+      # Extract the "inBattle" bit (bit 1)
+      (last_byte >> 1) & 0x01 == 1
     end
 
     def self.fetch_map_header
