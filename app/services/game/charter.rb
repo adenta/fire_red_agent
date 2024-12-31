@@ -44,6 +44,11 @@ module Game
       puts start_node
       puts end_node
 
+      if start_node.nil? || end_node.nil?
+        Game::MemoryMaker.create_not_found_path_memory(destination_x, destination_y)
+        raise PathNotFoundError
+      end
+
       finder = Pathfinding::AStarFinder.new(Pathfinding::Heuristic.method(:manhattan))
       path = finder.find_path(start_node, end_node, grid)
 

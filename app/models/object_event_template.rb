@@ -37,7 +37,7 @@ class ObjectEventTemplate
   end
 
   def x
-    if object_event.present?
+    if on_map?
       object_event.current_coords.first
     else
       @x
@@ -45,7 +45,7 @@ class ObjectEventTemplate
   end
 
   def y
-    if object_event.present?
+    if on_map?
       object_event.current_coords.second
     else
       @y
