@@ -15,7 +15,8 @@ class MapEvents
   end
 
   def unified_events
+    # TODO(adenta) remove coord and bg events for now, I don't think we need
     object_event_templates_on_map = object_event_templates.select(&:on_map?)
-    object_event_templates_on_map + warps + coord_events + bg_events
+    object_event_templates_on_map + warps
   end
 end

@@ -1,6 +1,7 @@
 namespace :red do
   task loop: :environment do
     loop do
+      Intelligence::BattleHandler.handle_battle
       Intelligence::ConversationHandler.handle_conversation
       Game::MemoryMaker.create_location_memory
       Game::MemoryMaker.create_destination_list_memory

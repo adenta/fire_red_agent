@@ -15,11 +15,7 @@ module Game
 
       events = [*map_events.unified_events, *additional_warps]
 
-      filtered_events = events.select do |warp|
-        map_cells[warp.y][warp.x].walkable?
-      end
-
-      filtered_events.map do |event|
+      events.map do |event|
         {
           x: event.x,
           y: event.y,
@@ -73,6 +69,8 @@ module Game
       end
 
       path.each_cons(2) do |node, next_node|
+        break if Game::MapReader.in_battle?
+
         dx = next_node.x - node.x
         dy = next_node.y - node.y
 

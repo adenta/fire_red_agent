@@ -29,5 +29,5 @@ DEC30
 
 - have the pathfinding look for any available warp to the next map, not just the leftmost walkable cell
 - get retroarch controller support
-- set up a battle handler
 - get things working on linux
+- figure out why professor oak isnt showing up on the map (it could be some sort of condiition where the objct events from the object event templates didn't get unloaded/reloaded, so I'm grabbing the wrong figure)
