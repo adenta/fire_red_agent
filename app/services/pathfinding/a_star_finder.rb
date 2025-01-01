@@ -80,5 +80,22 @@ module Pathfinding
       end
       total_path.reverse
     end
+
+    def walkable_nodes(start_node, grid)
+      visited = []
+      queue = [start_node]
+
+      until queue.empty?
+        current = queue.shift
+        next if visited.include?(current)
+
+        visited << current
+        grid.neighbors(current, start_node).each do |neighbor|
+          queue << neighbor unless visited.include?(neighbor)
+        end
+      end
+
+      visited
+    end
   end
 end

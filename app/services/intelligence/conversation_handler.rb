@@ -52,7 +52,7 @@ module Intelligence
         end
 
         # Not deleting because we are gitignoreing, imagine data might be useful later
-        # File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
+        File.delete(screenshot[:file_path]) if File.exist?(screenshot[:file_path])
 
         break if next_action == 'move_on'
 

@@ -11,11 +11,13 @@ module Game
     def self.list_destinations
       map_events = Game::EventReader.parse_map_events
       map_cells = Game::MapReader.fetch_map_cells
-      additional_warps = Game::EventReader.fetch_map_connection_warp_coords
+      # additional_warps = Game::EventReader.fetch_map_connection_warp_coords
+      walkable_coordinates = Game::Charter.walkable_coordinates
+      events = [*map_events.unified_events] # , *additional_warps]
 
-      events = [*map_events.unified_events, *additional_warps]
-
-      events.map do |event|
+      events.filter do |event|
+        walkable_coordinates.include?([event.x, event.y])
+      end.map do |event|
         {
           x: event.x,
           y: event.y,
@@ -122,6 +124,55 @@ module Game
       when Game::MetatileBehaviors::MB_SOUTH_ARROW_WARP
         Retroarch::KeyboardService.down
       end
+    end
+
+    def self.walkable_coordinates
+      map_cells = Game::MapReader.fetch_map_cells
+
+      grid = Pathfinding::Grid.new(map_cells)
+      player_location = Game::MapReader.fetch_player_location
+
+      start_node = grid.node(player_location[:x], player_location[:y])
+
+      walkable_nodes = Pathfinding::AStarFinder.new.walkable_nodes(start_node, grid)
+
+      walkable_nodes.map { |node| [node.x, node.y] }
+    end
+
+    def self.try_paths
+      init_map_name = Game::MapReader.fetch_map_name
+      ap 'trying a bunch of paths'
+      Retroarch::KeyboardService.up
+      Retroarch::KeyboardService.up
+      sleep 1
+      return if Game::MapReader.fetch_map_name != init_map_name
+
+      Retroarch::KeyboardService.down
+      Retroarch::KeyboardService.down
+      Retroarch::KeyboardService.down
+      Retroarch::KeyboardService.down
+      sleep 1
+
+      return if Game::MapReader.fetch_map_name != init_map_name
+
+      Retroarch::KeyboardService.up
+      Retroarch::KeyboardService.up
+      Retroarch::KeyboardService.left
+      Retroarch::KeyboardService.left
+      sleep 1
+
+      return if Game::MapReader.fetch_map_name != init_map_name
+
+      Retroarch::KeyboardService.right
+      Retroarch::KeyboardService.right
+      Retroarch::KeyboardService.right
+      Retroarch::KeyboardService.right
+      sleep 1
+
+      return if Game::MapReader.fetch_map_name != init_map_name
+
+      Retroarch::KeyboardService.left
+      Retroarch::KeyboardService.left
     end
   end
 end

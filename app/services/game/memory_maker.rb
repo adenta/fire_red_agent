@@ -5,6 +5,8 @@ module Game
       memory_role = GameMemory::SYSTEM_ROLE
       body = <<~BODY
         You are located on a grid at position #{player_location} on map #{Game::MapReader.fetch_map_name}.
+
+        The only x,y coordinates you can walk to are: #{Game::Charter.walkable_coordinates}
       BODY
 
       GameMemory.create!(memory_role: memory_role, body: body)

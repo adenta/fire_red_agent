@@ -11,6 +11,7 @@ namespace :red do
         Game::Charter.chart_path(x:, y:)
       rescue Game::PathNotFoundError
         ap 'Path not found error, continuing'
+        Game::Charter.try_paths
         next
       end
       Retroarch::KeyboardService.a

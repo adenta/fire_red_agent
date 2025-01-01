@@ -66,6 +66,7 @@ module Pathfinding
       start_chr = 's', end_chr = 'e', path_chr = 'x', empty_chr = ' ', block_chr = '#'
 
     )
+      walkable_coordinates = Game::Charter.walkable_coordinates
       data = []
       data << '+' + '-' * @width + '+' if border
       @height.times do |y|
@@ -83,6 +84,8 @@ module Pathfinding
                     'X'
                   elsif current&.events&.any?
                     '!'
+                  elsif walkable_coordinates.include?([current&.x, current&.y])
+                    '.'
                   elsif current&.walkable?
                     empty_chr
                   else
