@@ -6,10 +6,8 @@ This is my attempt at getting a large language model to play Pokémon FireRed au
 
 To me, this is the future of TV. While building the bot, I felt like I was producing television more than I was programming a computer. Ultimately, I ran into some technical hurdles around programmatic input control, which led me to pause development.
 
-<video width="100%" controls>
-    <source src="https://f005.backblazeb2.com/file/fire-red-agent/FIRE_RED_PROMO.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+[Watch the demo video.](https://f005.backblazeb2.com/file/fire-red-agent/FIRE_RED_PROMO.mp4)
+[Watch the technical deep dive.](<https://f005.backblazeb2.com/file/fire-red-agent/HD+project+walkthrough+(taylors+version).mp4>)
 
 ## How It Works
 
