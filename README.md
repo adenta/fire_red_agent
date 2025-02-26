@@ -66,6 +66,8 @@ Griffin R. – Huge help on reading game memory.
 
 [The Pokémon ROM hacking/decompilation community](https://pret.github.io) – Without them, this wouldn’t have been possible.
 
+[OpenPipe](openpipe.ai/) - LLM observability.
+
 Contact
 
 You can find me on [LinkedIn](linkedin.com/in/adenta/) and [Hacker News](https://news.ycombinator.com/user?id=adenta).
