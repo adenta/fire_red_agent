@@ -44,6 +44,14 @@ When talking to NPCs, the AI needed to determine if it should continue the conve
 
 If the AI detected text, it continued pressing A. If no new text appeared, it moved on to the next part of the script.
 
+## Important Files/Directories
+
+- **[Game Reasonings](https://github.com/adenta/fire_red_agent/tree/main/app/reasonings)**: Ruby-based type definitions (similar to Pydantic in Python)
+- **[Emulator Interaction](https://github.com/adenta/fire_red_agent/tree/main/app/services/retroarch)**: Code for interfacing with RetroArch
+- **[LLM Integration](https://github.com/adenta/fire_red_agent/tree/main/app/services/intelligence)**: API calls and prompt handling for GPT-4o
+- **[Memory Reading](https://github.com/adenta/fire_red_agent/tree/main/app/services/game)**: Tools for reading and parsing emulator RAM
+- **[State Persistence](https://github.com/adenta/fire_red_agent/blob/main/app/services/game/memory_maker.rb)**: Long-term memory management for the AI agent
+
 ## Challenges & Why I Paused Development
 
 The biggest hurdle was sending inputs to the emulator.
